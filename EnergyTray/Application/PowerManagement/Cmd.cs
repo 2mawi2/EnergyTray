@@ -11,7 +11,7 @@ namespace EnergyTray.Application.PowerManagement
             _cmdPath = cmdPath;
         }
 
-        public void ExecCommand(string command, DataReceivedEventHandler callback = null)
+        public string ExecCommand(string command, DataReceivedEventHandler callback = null)
         {
             var cmdProcess = StartCmd();
             if (callback != null)
@@ -20,10 +20,21 @@ namespace EnergyTray.Application.PowerManagement
             }
             cmdProcess.EnableRaisingEvents = true;
             cmdProcess.Start();
-            cmdProcess.BeginOutputReadLine();
+            //cmdProcess.BeginOutputReadLine();
             cmdProcess.StandardInput.WriteLine(command);
             cmdProcess.StandardInput.WriteLine("exit");
+
+            var output = "";
+            string standard_output;
+            while ((standard_output = cmdProcess.StandardOutput.ReadLine()) != null)
+            {
+                output += standard_output + System.Environment.NewLine;
+            }
+
+
             cmdProcess.WaitForExit();
+
+            return output;
         }
 
 

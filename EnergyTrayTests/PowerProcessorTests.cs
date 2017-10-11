@@ -45,7 +45,7 @@ namespace EnergyTrayTests
             var cmd = new Mock<ICmd>();
             var processor = new PowerProcessor(cmd.Object);
             var testHandler = new DataReceivedEventHandler(delegate { });
-            processor.GetActivePowerScheme(testHandler);
+            processor.GetActivePowerScheme();
 
             cmd.Verify(i => i.ExecCommand(
                 It.Is<string>(j => j == @"powercfg.exe /getactivescheme"),

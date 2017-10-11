@@ -4,6 +4,6 @@ namespace EnergyTray.Application.PowerManagement
 {
     public interface ICmd
     {
-        void ExecCommand(string command, DataReceivedEventHandler callback = null);
+        string ExecCommand(string command, DataReceivedEventHandler callback = null);
     }
 }

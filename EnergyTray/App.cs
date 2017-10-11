@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics;
 using System.Drawing;
 using System.Linq;
 using EnergyTray.Application;
@@ -24,13 +25,8 @@ namespace EnergyTray
 
         private void GetPowerSchemes()
         {
-            _powerProcessor.GetAllPowerSchemes((sender, args) =>
-            {
-                var outputLine = args.Data;
-                var powerSchemes = StringUtils.GetAllSchemes(outputLine);
-                _processIcon.InitializeIcon(powerSchemes);
-                _processIcon.Display();
-            });
+            var powerSchemes = StringUtils.GetAllSchemes(_powerProcessor.GetAllPowerSchemes());
+            _processIcon.InitializeIcon(powerSchemes);
         }
 
         public void Dispose()

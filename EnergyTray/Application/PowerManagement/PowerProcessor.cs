@@ -11,24 +11,24 @@ namespace EnergyTray.Application.PowerManagement
             _cmd = cmd;
         }
 
-        public void SwitchScheme(string powerSchemeId)
+        public string SwitchScheme(string powerSchemeId)
         {
-            _cmd.ExecCommand($"powercfg.exe /s {powerSchemeId}");
+            return _cmd.ExecCommand($"powercfg.exe /s {powerSchemeId}");
         }
 
-        public void OpenOptions()
+        public string OpenOptions()
         {
-            _cmd.ExecCommand(@"%windir%\system32\control.exe /name Microsoft.PowerOptions /page");
+            return _cmd.ExecCommand(@"%windir%\system32\control.exe /name Microsoft.PowerOptions /page");
         }
 
-        public void GetActivePowerScheme(DataReceivedEventHandler handler)
+        public string GetActivePowerScheme()
         {
-            _cmd.ExecCommand(@"powercfg.exe /getactivescheme", handler);
+            return _cmd.ExecCommand(@"powercfg.exe /getactivescheme");
         }
         
-        public void GetAllPowerSchemes(DataReceivedEventHandler handler)
+        public string GetAllPowerSchemes()
         {
-            _cmd.ExecCommand(@"powercfg.exe /list", handler);
+            return _cmd.ExecCommand(@"powercfg.exe /list");
         }
     }
 }

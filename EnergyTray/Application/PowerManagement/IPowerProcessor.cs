@@ -4,9 +4,9 @@ namespace EnergyTray.Application.PowerManagement
 {
     public interface IPowerProcessor
     {
-        void SwitchScheme(string powerSchemeId);
-        void OpenOptions();
-        void GetActivePowerScheme(DataReceivedEventHandler handler);
-        void GetAllPowerSchemes(DataReceivedEventHandler handler);
+        string SwitchScheme(string powerSchemeId);
+        string OpenOptions();
+        string GetActivePowerScheme();
+        string GetAllPowerSchemes();
     }
 }

@@ -6,7 +6,6 @@ namespace EnergyTray.UI
 {
     public interface IProcessIcon : IDisposable
     {
-        void Display();
         void InitializeIcon(IEnumerable<PowerScheme> schemes);
     }
 }

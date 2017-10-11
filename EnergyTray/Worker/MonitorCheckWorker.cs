@@ -45,22 +45,7 @@ namespace EnergyTray.Worker
                     }
                     else
                     {
-                        _powerProcessor.GetActivePowerScheme((opt, args) =>
-                        {
-                            var outputLine = args.Data;
-                            if (!string.IsNullOrEmpty(outputLine))
-                            {
-                                if (outputLine.Contains("Power Scheme GUID"))
-                                {
-                                    outputLine = outputLine.Replace("Power Scheme GUID: ", "");
-                                    outputLine = outputLine.Remove(36, outputLine.ToCharArray().Length - 36);
-                                    if (outputLine == Global.Powermode)
-                                    {
-                                        _powerProcessor.SwitchScheme(Global.Dell);
-                                    }
-                                }
-                            }
-                        });
+                        _powerProcessor.GetActivePowerScheme();
                     }
                 }
                 System.Threading.Thread.Sleep(4000);
