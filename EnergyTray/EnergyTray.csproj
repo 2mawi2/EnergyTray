@@ -75,12 +75,14 @@
     <Reference Include="System.Windows.Forms" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="IPowerProcessor.cs" />
-    <Compile Include="PowerProcessor.cs" />
+    <Compile Include="Application\PowerManagement\Cmd.cs" />
+    <Compile Include="Application\PowerManagement\ICmd.cs" />
+    <Compile Include="Application\PowerManagement\IPowerProcessor.cs" />
+    <Compile Include="Application\PowerManagement\PowerProcessor.cs" />
+    <Compile Include="Application\Utils\StringUtils.cs" />
+    <Compile Include="UI\IContextMenu.cs" />
     <Compile Include="UI\IProcessIcon.cs" />
-    <Compile Include="Utils\StringUtils.cs" />
-    <Compile Include="Worker\Cmd.cs" />
-    <Compile Include="UI\ContextMenus.cs" />
+    <Compile Include="UI\ContextMenu.cs" />
     <Compile Include="UI\Form1.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -88,7 +90,7 @@
       <DependentUpon>Form1.cs</DependentUpon>
     </Compile>
     <Compile Include="Application\Global.cs" />
-    <Compile Include="Worker\ICmd.cs" />
+    <Compile Include="Worker\IMonitorCheckWorker.cs" />
     <Compile Include="Worker\MonitorCheckWorker.cs" />
     <Compile Include="Worker\ProcessWorker.cs" />
     <Compile Include="UI\ProcessIcon.cs" />

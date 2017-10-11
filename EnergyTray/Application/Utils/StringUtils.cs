@@ -1,4 +1,4 @@
-﻿namespace EnergyTray
+﻿namespace EnergyTray.Application.Utils
 {
     public class StringUtils
     {

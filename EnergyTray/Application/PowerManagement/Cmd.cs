@@ -1,6 +1,6 @@
 ﻿using System.Diagnostics;
 
-namespace EnergyTray.Worker
+namespace EnergyTray.Application.PowerManagement
 {
     public class Cmd : ICmd
     {
@@ -18,11 +18,6 @@ namespace EnergyTray.Worker
             {
                 cmdProcess.OutputDataReceived += callback;
             }
-            ConfigureCommandLine(command, cmdProcess);
-        }
-
-        private static void ConfigureCommandLine(string command, Process cmdProcess)
-        {
             cmdProcess.EnableRaisingEvents = true;
             cmdProcess.Start();
             cmdProcess.BeginOutputReadLine();
@@ -30,6 +25,7 @@ namespace EnergyTray.Worker
             cmdProcess.StandardInput.WriteLine("exit");
             cmdProcess.WaitForExit();
         }
+
 
         private Process StartCmd() => new Process
         {

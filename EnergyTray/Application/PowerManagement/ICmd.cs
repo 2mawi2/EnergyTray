@@ -1,6 +1,6 @@
 ﻿using System.Diagnostics;
 
-namespace EnergyTray.Worker
+namespace EnergyTray.Application.PowerManagement
 {
     public interface ICmd
     {

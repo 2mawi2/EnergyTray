@@ -3,6 +3,8 @@ using System.Diagnostics;
 using System.Reflection;
 using System.Windows.Forms;
 using EnergyTray.Application;
+using EnergyTray.Application.PowerManagement;
+using EnergyTray.Application.Utils;
 using EnergyTray.Properties;
 using EnergyTray.Worker;
 
@@ -10,18 +12,20 @@ namespace EnergyTray.UI
 {
     public class ProcessIcon : IProcessIcon
     {
-        private readonly ICmd _cmd;
+        private readonly IMonitorCheckWorker _monitorCheckWorker;
+        private readonly IContextMenu _contextMenu;
+        private readonly IPowerProcessor _powerProcessor;
 
-        /// <summary>
-        /// The NotifyIcon object.
-        /// </summary>
         private NotifyIcon Icon { get; }
 
-        private ContextMenus _contextMenus;
-
-        public ProcessIcon(ICmd cmd)
+        public ProcessIcon(
+            IMonitorCheckWorker monitorCheckWorker,
+            IContextMenu contextMenu,
+            IPowerProcessor powerProcessor)
         {
-            _cmd = cmd;
+            _monitorCheckWorker = monitorCheckWorker;
+            _contextMenu = contextMenu;
+            _powerProcessor = powerProcessor;
             Icon = new NotifyIcon();
         }
 
@@ -37,14 +41,13 @@ namespace EnergyTray.UI
             Icon.MouseDoubleClick += OnDoubleClick;
             Icon.Text = Resources.ProcessIcon_Display_Energy_Tray;
             Icon.Visible = true;
-            _contextMenus = new ContextMenus(this, _cmd);
-            Icon.ContextMenuStrip = _contextMenus.Create();
+            Icon.ContextMenuStrip = _contextMenu.Create();
             Icon.Icon = Resources.Icon1;
         }
 
         public void UpdateIcon()
         {
-            _cmd.ExecCommand("powercfg.exe /getactivescheme", (sender, args) =>
+            _powerProcessor.GetPowerScheme((sender, args) =>
             {
                 var outputLine = args.Data;
                 if (!string.IsNullOrEmpty(outputLine))
@@ -80,7 +83,7 @@ namespace EnergyTray.UI
                                 break;
                         }
 
-                        if (_contextMenus.MonitorCheckWorker.AutoEnabled)
+                        if (_monitorCheckWorker.AutoEnabled)
                         {
                             Icon.Text = Icon.Text + " (Auto)";
                         }
@@ -103,7 +106,7 @@ namespace EnergyTray.UI
 
         private void OnDoubleClick(object sender, MouseEventArgs e)
         {
-            _cmd.ExecCommand(@"%windir%\system32\control.exe /name Microsoft.PowerOptions /page");
+            _powerProcessor.OpenOptions();
             ForceMenuClose();
         }
 
