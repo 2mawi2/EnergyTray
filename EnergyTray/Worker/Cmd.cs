@@ -2,15 +2,27 @@
 
 namespace EnergyTray.Worker
 {
-    public class Cmd
+    public class Cmd : ICmd
     {
-        public static void ExecCommand(string command, DataReceivedEventHandler callback = null)
+        private readonly string _cmdPath;
+
+        public Cmd(string cmdPath = @"C:\Windows\System32\cmd.exe")
+        {
+            _cmdPath = cmdPath;
+        }
+
+        public void ExecCommand(string command, DataReceivedEventHandler callback = null)
         {
             var cmdProcess = StartCmd();
             if (callback != null)
             {
                 cmdProcess.OutputDataReceived += callback;
             }
+            ConfigureCommandLine(command, cmdProcess);
+        }
+
+        private static void ConfigureCommandLine(string command, Process cmdProcess)
+        {
             cmdProcess.EnableRaisingEvents = true;
             cmdProcess.Start();
             cmdProcess.BeginOutputReadLine();
@@ -19,19 +31,18 @@ namespace EnergyTray.Worker
             cmdProcess.WaitForExit();
         }
 
-        private static Process StartCmd()
+        private Process StartCmd() => new Process
         {
-            var cmdStartInfo = new ProcessStartInfo
+            StartInfo = new ProcessStartInfo
             {
-                FileName = @"C:\Windows\System32\cmd.exe",
+                FileName = _cmdPath,
                 RedirectStandardOutput = true,
                 RedirectStandardError = true,
                 RedirectStandardInput = true,
                 UseShellExecute = false,
                 CreateNoWindow = true,
                 WindowStyle = ProcessWindowStyle.Hidden
-            };
-            return new Process {StartInfo = cmdStartInfo};
-        }
+            }
+        };
     }
 }

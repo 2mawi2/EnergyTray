@@ -1,4 +1,4 @@
-﻿using System;
+﻿using System.ComponentModel;
 using System.Diagnostics;
 using System.Reflection;
 using System.Windows.Forms;
@@ -8,11 +8,10 @@ using EnergyTray.Worker;
 
 namespace EnergyTray.UI
 {
-    /// <summary>
-    /// 
-    /// </summary>
-    public class ProcessIcon : IDisposable
+    public class ProcessIcon : IProcessIcon
     {
+        private readonly ICmd _cmd;
+
         /// <summary>
         /// The NotifyIcon object.
         /// </summary>
@@ -20,102 +19,74 @@ namespace EnergyTray.UI
 
         private ContextMenus _contextMenus;
 
-        public ProcessIcon()
+        public ProcessIcon(ICmd cmd)
         {
+            _cmd = cmd;
             Icon = new NotifyIcon();
         }
 
-        /// <summary>
-        /// gets called by Program.cs/>
-        /// </summary>
         public void Display()
+        {
+            InitIcon();
+            UpdateIcon();
+        }
+
+        private void InitIcon()
         {
             Icon.MouseUp += OnClick;
             Icon.MouseDoubleClick += OnDoubleClick;
             Icon.Text = Resources.ProcessIcon_Display_Energy_Tray;
             Icon.Visible = true;
-            _contextMenus = new ContextMenus(this);
+            _contextMenus = new ContextMenus(this, _cmd);
             Icon.ContextMenuStrip = _contextMenus.Create();
             Icon.Icon = Resources.Icon1;
-            UpdateIcon();
         }
-
-
-        private void RefreshIcon(CurrentMode mode)
-        {
-            switch (mode)
-            {
-                case CurrentMode.Download:
-                    Icon.Icon = Resources.Download;
-                    Icon.Text = mode.ToString();
-                    break;
-                case CurrentMode.Power:
-                    Icon.Icon = Resources.Power;
-                    Icon.Text = mode.ToString();
-                    break;
-                case CurrentMode.Balanced:
-                    Icon.Icon = Resources.Balanced;
-                    Icon.Text = mode.ToString();
-                    break;
-                case CurrentMode.Energysaver:
-                    Icon.Icon = Resources.EnergySaver;
-                    Icon.Text = mode.ToString();
-                    break;
-                case CurrentMode.Dell:
-                    Icon.Icon = Resources.Dell;
-                    Icon.Text = mode.ToString();
-                    break;
-                default:
-                    Icon.Icon = Resources.Dell;
-                    Icon.Text = "Error while loading energy setup";
-                    break;
-            }
-            if(_contextMenus._monitorCheckWorker.AutoEnabled)
-            {
-                Icon.Text = Icon.Text + " (Auto)";
-            }
-        }
-
 
         public void UpdateIcon()
         {
-            Cmd.ExecCommand("powercfg.exe /getactivescheme", OnDataReceived);
-        }
-
-        /// <summary>
-        /// CallbackHandler for CheckCurrentState
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
-        private void OnDataReceived(object sender, DataReceivedEventArgs e)
-        {
-            var outputLine = e.Data;
-            if (!string.IsNullOrEmpty(outputLine))
+            _cmd.ExecCommand("powercfg.exe /getactivescheme", (sender, args) =>
             {
-                if (outputLine.Contains("Power Scheme GUID"))
+                var outputLine = args.Data;
+                if (!string.IsNullOrEmpty(outputLine))
                 {
-                    outputLine = outputLine.Replace("Power Scheme GUID: ", "");
-                    outputLine = outputLine.Remove(36, outputLine.ToCharArray().Length - 36);
-                    switch (outputLine)
+                    if (StringUtils.IsPowerSchemeOutput(outputLine))
                     {
-                        case Global.Download:
-                            RefreshIcon(CurrentMode.Download);
-                            break;
-                        case Global.Energysaver:
-                            RefreshIcon(CurrentMode.Energysaver);
-                            break;
-                        case Global.Balanced:
-                            RefreshIcon(CurrentMode.Balanced);
-                            break;
-                        case Global.Powermode:
-                            RefreshIcon(CurrentMode.Power);
-                            break;
-                        case Global.Dell:
-                            RefreshIcon(CurrentMode.Dell);
-                            break;
+                        outputLine = StringUtils.GetSchemeId(outputLine);
+                        switch (outputLine)
+                        {
+                            case Global.Download:
+                                Icon.Icon = Resources.Download;
+                                Icon.Text = outputLine.ToString();
+                                break;
+                            case Global.Energysaver:
+                                Icon.Icon = Resources.EnergySaver;
+                                Icon.Text = outputLine.ToString();
+                                break;
+                            case Global.Balanced:
+                                Icon.Icon = Resources.Balanced;
+                                Icon.Text = outputLine.ToString();
+                                break;
+                            case Global.Powermode:
+                                Icon.Icon = Resources.Power;
+                                Icon.Text = outputLine.ToString();
+                                break;
+                            case Global.Dell:
+                                Icon.Icon = Resources.Dell;
+                                Icon.Text = outputLine.ToString();
+                                break;
+                            default:
+                                Icon.Icon = Resources.Dell;
+                                Icon.Text = "Error while loading energy setup";
+                                break;
+                        }
+
+                        if (_contextMenus.MonitorCheckWorker.AutoEnabled)
+                        {
+                            Icon.Text = Icon.Text + " (Auto)";
+                        }
                     }
                 }
-            }
+            });
         }
 
         public void Dispose() => Icon.Dispose();
@@ -124,37 +95,25 @@ namespace EnergyTray.UI
         {
             if (e.Button == MouseButtons.Left)
             {
-                var mi = typeof(NotifyIcon).GetMethod("ShowContextMenu",
-                    BindingFlags.Instance | BindingFlags.NonPublic);
+                var mi = typeof(NotifyIcon).GetMethod(
+                    "ShowContextMenu", BindingFlags.Instance | BindingFlags.NonPublic);
                 mi.Invoke(Icon, null);
             }
         }
 
-        private ContextMenuStrip _contextMenuStripSave;
-
         private void OnDoubleClick(object sender, MouseEventArgs e)
         {
-            Cmd.ExecCommand(@"%windir%\system32\control.exe /name Microsoft.PowerOptions /page");
+            _cmd.ExecCommand(@"%windir%\system32\control.exe /name Microsoft.PowerOptions /page");
             ForceMenuClose();
         }
 
         private void ForceMenuClose()
         {
             var mi = typeof(NotifyIcon).GetMethod("UpdateIcon", BindingFlags.Instance | BindingFlags.NonPublic);
-            _contextMenuStripSave = Icon.ContextMenuStrip;
+            var contextMenuStripSave = Icon.ContextMenuStrip;
             Icon.ContextMenuStrip = null;
             mi.Invoke(Icon, new object[] {true});
-            Icon.ContextMenuStrip = _contextMenuStripSave;
-        }
-
-
-        public enum CurrentMode
-        {
-            Download,
-            Energysaver,
-            Power,
-            Balanced,
-            Dell
+            Icon.ContextMenuStrip = contextMenuStripSave;
         }
     }
 }

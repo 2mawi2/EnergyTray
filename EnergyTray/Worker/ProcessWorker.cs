@@ -30,7 +30,6 @@ namespace EnergyTray.Worker
             }
             else
             {
-                
                 var processRecommendation = CheckProcesses();
                 //Check CPU State and wait for specific amount of time
 
@@ -57,14 +56,6 @@ namespace EnergyTray.Worker
                                                                || i.ProcessName.Contains("vmware-vmx")
                                                                || i.ProcessName.Contains("idea");
 
-        /// <summary>
-        /// Checks if CPU state triggers energy mode change
-        /// </summary>
-        public ProcessIcon.CurrentMode CheckCpuState()
-        {
-            throw new NotImplementedException();
-            return ProcessIcon.CurrentMode.Download;
-        }
 
         private void RestartWorkerOnCompleted(object sender, RunWorkerCompletedEventArgs e) => _bw.RunWorkerAsync();
     }

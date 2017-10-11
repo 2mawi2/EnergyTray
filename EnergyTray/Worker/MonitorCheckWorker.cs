@@ -12,13 +12,15 @@ namespace EnergyTray.Worker
     {
         private readonly EventHandler _powerModeEventHandler;
         private readonly EventHandler _dellModeEventHandler;
+        private readonly ICmd _cmd;
         private readonly BackgroundWorker _bw = new BackgroundWorker();
         public bool AutoEnabled = true;
 
-        public MonitorCheckWorker(EventHandler powerModeEventHandler, EventHandler dellModeEventHandler)
+        public MonitorCheckWorker(EventHandler powerModeEventHandler, EventHandler dellModeEventHandler, ICmd cmd)
         {
             _powerModeEventHandler = powerModeEventHandler;
             _dellModeEventHandler = dellModeEventHandler;
+            _cmd = cmd;
             _bw.WorkerReportsProgress = true;
             _bw.WorkerSupportsCancellation = true;
             _bw.DoWork += bw_DoWork;
@@ -44,7 +46,7 @@ namespace EnergyTray.Worker
                     }
                     else
                     {
-                        Cmd.ExecCommand("powercfg.exe /getactivescheme", SwitchToDellModeHandler);
+                        _cmd.ExecCommand("powercfg.exe /getactivescheme", SwitchToDellModeHandler);
                     }
                 }
                 System.Threading.Thread.Sleep(4000);

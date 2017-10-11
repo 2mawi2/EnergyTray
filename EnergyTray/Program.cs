@@ -1,5 +1,7 @@
 ﻿using System;
+using System.Diagnostics;
 using EnergyTray.UI;
+using StructureMap;
 using static System.Windows.Forms.Application;
 
 namespace EnergyTray
@@ -14,11 +16,20 @@ namespace EnergyTray
         {
             EnableVisualStyles();
             SetCompatibleTextRenderingDefault(false);
-            using (var tray = new ProcessIcon())
+
+            var container = CreateContainer();
+
+            using (var tray = container.GetInstance<IProcessIcon>())
             {
                 tray.Display();
                 Run();
             }
         }
+
+        private static Container CreateContainer() => new Container(i => i.Scan(_ =>
+        {
+            _.TheCallingAssembly();
+            _.WithDefaultConventions();
+        }));
     }
 }

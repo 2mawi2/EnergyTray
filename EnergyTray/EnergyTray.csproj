@@ -66,7 +66,6 @@
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
-    <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Data" />
@@ -74,9 +73,12 @@
     <Reference Include="System.Drawing" />
     <Reference Include="System.Net.Http" />
     <Reference Include="System.Windows.Forms" />
-    <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="IPowerProcessor.cs" />
+    <Compile Include="PowerProcessor.cs" />
+    <Compile Include="UI\IProcessIcon.cs" />
+    <Compile Include="Utils\StringUtils.cs" />
     <Compile Include="Worker\Cmd.cs" />
     <Compile Include="UI\ContextMenus.cs" />
     <Compile Include="UI\Form1.cs">
@@ -86,6 +88,7 @@
       <DependentUpon>Form1.cs</DependentUpon>
     </Compile>
     <Compile Include="Application\Global.cs" />
+    <Compile Include="Worker\ICmd.cs" />
     <Compile Include="Worker\MonitorCheckWorker.cs" />
     <Compile Include="Worker\ProcessWorker.cs" />
     <Compile Include="UI\ProcessIcon.cs" />
@@ -104,7 +107,6 @@
       <DependentUpon>Resources.resx</DependentUpon>
       <DesignTime>True</DesignTime>
     </Compile>
-    <None Include="EnergyTray_TemporaryKey.pfx" />
     <None Include="packages.config" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
@@ -115,9 +117,6 @@
       <DependentUpon>Settings.settings</DependentUpon>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
-  </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Images\" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\Icon1.ico" />

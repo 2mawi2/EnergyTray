@@ -5,17 +5,17 @@ using EnergyTray.Worker;
 
 namespace EnergyTray.UI
 {
-    class ContextMenus
+    public class ContextMenus
     {
         private readonly ProcessIcon _icon;
-        public MonitorCheckWorker _monitorCheckWorker;
-        public Cmd Cmd { get; }
+        public readonly MonitorCheckWorker MonitorCheckWorker;
+        private readonly ICmd _cmd;
 
-        public ContextMenus(ProcessIcon processIcon)
+        public ContextMenus(ProcessIcon icon, ICmd cmd)
         {
-            _icon = processIcon;
-            Cmd = new Cmd();
-            _monitorCheckWorker = new MonitorCheckWorker(PowerMode_Click, Dell_Click);
+            _icon = icon;
+            _cmd = cmd;
+            MonitorCheckWorker = new MonitorCheckWorker(PowerMode_Click, Dell_Click, _cmd);
         }
 
         public ContextMenuStrip Create()
@@ -41,7 +41,7 @@ namespace EnergyTray.UI
             item = new ToolStripMenuItem {Text = "Dell"};
             item.Click += Dell_Click;
             menu.Items.Add(item);
-            item = new ToolStripMenuItem { Text = "Automatic Mode" };
+            item = new ToolStripMenuItem {Text = "Automatic Mode"};
             item.Click += Auto_Click;
             menu.Items.Add(item);
             // Separator.
@@ -56,44 +56,44 @@ namespace EnergyTray.UI
 
         private void Auto_Click(object sender, EventArgs e)
         {
-            _monitorCheckWorker.AutoEnabled = !_monitorCheckWorker.AutoEnabled;
+            MonitorCheckWorker.AutoEnabled = !MonitorCheckWorker.AutoEnabled;
             _icon.UpdateIcon();
         }
 
 
         private void Download_Click(object sender, EventArgs e)
         {
-            Cmd.ExecCommand("powercfg.exe /s " + Global.Download);
+            _cmd.ExecCommand("powercfg.exe /s " + Global.Download);
             _icon.UpdateIcon();
         }
 
         private void Dell_Click(object sender, EventArgs e)
         {
-            Cmd.ExecCommand("powercfg.exe /s " + Global.Dell);
+            _cmd.ExecCommand("powercfg.exe /s " + Global.Dell);
             _icon.UpdateIcon();
         }
 
         private void EnergySaver_Click(object sender, EventArgs e)
         {
-            Cmd.ExecCommand("powercfg.exe /s " + Global.Energysaver);
+            _cmd.ExecCommand("powercfg.exe /s " + Global.Energysaver);
             _icon.UpdateIcon();
         }
 
         private void PowerMode_Click(object sender, EventArgs e)
         {
-            Cmd.ExecCommand("powercfg.exe /s " + Global.Powermode);
+            _cmd.ExecCommand("powercfg.exe /s " + Global.Powermode);
             _icon.UpdateIcon();
         }
 
         private void Balanced_Click(object sender, EventArgs e)
         {
-            Cmd.ExecCommand("powercfg.exe /s " + Global.Balanced);
+            _cmd.ExecCommand("powercfg.exe /s " + Global.Balanced);
             _icon.UpdateIcon();
         }
 
         private void Options_Click(object sender, EventArgs e)
         {
-            Cmd.ExecCommand(@"%windir%\system32\control.exe /name Microsoft.PowerOptions /page");
+            _cmd.ExecCommand(@"%windir%\system32\control.exe /name Microsoft.PowerOptions /page");
         }
     }
 }
