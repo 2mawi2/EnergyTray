@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 using EnergyTray.Application.Model;
 
@@ -10,5 +11,6 @@ namespace EnergyTray.Application.PowerManagement
         string OpenOptions();
         PowerScheme GetActivePowerScheme();
         IEnumerable<PowerScheme> GetAllPowerSchemes();
+        EventHandler OnPowerSchemeChange { get; set; }
     }
 }

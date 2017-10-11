@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using EnergyTray.Application.Model;
@@ -17,7 +18,9 @@ namespace EnergyTray.Application.PowerManagement
 
         public string SwitchScheme(string powerSchemeId)
         {
-            return _cmd.ExecCommand($"powercfg.exe /s {powerSchemeId}");
+            var result = _cmd.ExecCommand($"powercfg.exe /s {powerSchemeId}");
+            OnPowerSchemeChange?.Invoke(null, EventArgs.Empty);
+            return result;
         }
 
         public string OpenOptions()
@@ -31,5 +34,7 @@ namespace EnergyTray.Application.PowerManagement
         {
             return StringUtils.GetAllSchemes(_cmd.ExecCommand(@"powercfg.exe /list"));
         }
+
+        public EventHandler OnPowerSchemeChange { get; set; } = null;
     }
 }

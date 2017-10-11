@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel;
 using System.Diagnostics;
 using System.Linq;
@@ -29,8 +30,11 @@ namespace EnergyTray.UI
             _monitorCheckWorker = monitorCheckWorker;
             _contextMenu = contextMenu;
             _powerProcessor = powerProcessor;
+            _powerProcessor.OnPowerSchemeChange += (sender, e) => Update();
+            monitorCheckWorker.OnAutoChanged = (sender, e) => Update();
             Icon = new NotifyIcon();
         }
+
 
         public void InitializeIcon(IEnumerable<PowerScheme> schemes)
         {
