@@ -22,8 +22,7 @@ namespace EnergyTrayTests
             processor.SwitchScheme(schemeId);
 
             cmd.Verify(i => i.ExecCommand(
-                It.Is<string>(j => j == $"powercfg.exe /s {schemeId}"),
-                It.IsAny<DataReceivedEventHandler>()));
+                It.Is<string>(j => j == $"powercfg.exe /s {schemeId}")));
         }
 
         [Theory, AutoData]
@@ -35,8 +34,7 @@ namespace EnergyTrayTests
             processor.OpenOptions();
 
             cmd.Verify(i => i.ExecCommand(
-                It.Is<string>(j => j == @"%windir%\system32\control.exe /name Microsoft.PowerOptions /page"),
-                It.IsAny<DataReceivedEventHandler>()));
+                It.Is<string>(j => j == @"%windir%\system32\control.exe /name Microsoft.PowerOptions /page")));
         }
 
         [Fact]
@@ -45,7 +43,7 @@ namespace EnergyTrayTests
             var cmd = new Mock<ICmd>();
             var processor = new PowerProcessor(cmd.Object);
             var testHandler = new DataReceivedEventHandler(delegate { });
-            
+
             Assert.Throws<EnergyTrayException>(() => processor.GetActivePowerScheme());
         }
 
@@ -59,8 +57,7 @@ namespace EnergyTrayTests
             Assert.Throws<EnergyTrayException>(() => processor.GetAllPowerSchemes());
 
             cmd.Verify(i => i.ExecCommand(
-                It.Is<string>(j => j == @"powercfg.exe /list"),
-                It.IsAny<DataReceivedEventHandler>()));
+                It.Is<string>(j => j == @"powercfg.exe /list")));
         }
 
         [Fact]
@@ -81,8 +78,7 @@ namespace EnergyTrayTests
             ";
 
             cmd.Setup(i => i.ExecCommand(
-                   It.Is<string>(j => j == @"powercfg.exe /list"),
-                   It.IsAny<DataReceivedEventHandler>()))
+                   It.Is<string>(j => j == @"powercfg.exe /list")))
                .Returns(inputString);
 
             var schemes = processor.GetActivePowerScheme();

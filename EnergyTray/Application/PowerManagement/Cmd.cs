@@ -11,30 +11,40 @@ namespace EnergyTray.Application.PowerManagement
             _cmdPath = cmdPath;
         }
 
-        public string ExecCommand(string command, DataReceivedEventHandler callback = null)
+        public string ExecCommand(string command)
         {
-            var cmdProcess = StartCmd();
-            if (callback != null)
-            {
-                cmdProcess.OutputDataReceived += callback;
-            }
-            cmdProcess.EnableRaisingEvents = true;
-            cmdProcess.Start();
-            //cmdProcess.BeginOutputReadLine();
-            cmdProcess.StandardInput.WriteLine(command);
-            cmdProcess.StandardInput.WriteLine("exit");
+            var cmdProcess = CreateCmdProcess();
 
-            var output = "";
-            string standard_output;
-            while ((standard_output = cmdProcess.StandardOutput.ReadLine()) != null)
-            {
-                output += standard_output + System.Environment.NewLine;
-            }
-
+            WriteCommand(command, cmdProcess);
+            var output = ReadOutput(cmdProcess);
 
             cmdProcess.WaitForExit();
-
             return output;
+        }
+
+        private Process CreateCmdProcess()
+        {
+            var cmdProcess = StartCmd();
+            cmdProcess.EnableRaisingEvents = true;
+            cmdProcess.Start();
+            return cmdProcess;
+        }
+
+        private static string ReadOutput(Process cmdProcess)
+        {
+            var output = "";
+            string standardOutput;
+            while ((standardOutput = cmdProcess.StandardOutput.ReadLine()) != null)
+            {
+                output += standardOutput + System.Environment.NewLine;
+            }
+            return output;
+        }
+
+        private static void WriteCommand(string command, Process cmdProcess)
+        {
+            cmdProcess.StandardInput.WriteLine(command);
+            cmdProcess.StandardInput.WriteLine("exit");
         }
 
 

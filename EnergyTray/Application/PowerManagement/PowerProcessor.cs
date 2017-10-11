@@ -33,7 +33,7 @@ namespace EnergyTray.Application.PowerManagement
             var scheme = GetAllPowerSchemes().SingleOrDefault(i => i.IsActive);
             if (scheme == null)
             {
-                throw new EnergyTrayException("No Active power plan found");
+                throw new EnergyTrayException("No active power plan found");
             }
             return scheme;
         }
