@@ -40,16 +40,54 @@ namespace EnergyTrayTests
         }
 
         [Fact]
-        public void GetPowerSchemeTest()
+        public void GetActivePowerSchemeTest_Throws()
         {
             var cmd = new Mock<ICmd>();
             var processor = new PowerProcessor(cmd.Object);
             var testHandler = new DataReceivedEventHandler(delegate { });
-            processor.GetActivePowerScheme();
+            
+            Assert.Throws<EnergyTrayException>(() => processor.GetActivePowerScheme());
+        }
+
+        [Fact]
+        public void GetAllPowerSchemesTest_ThrowsIfNoActiveSchemeFound()
+        {
+            var cmd = new Mock<ICmd>();
+            var processor = new PowerProcessor(cmd.Object);
+            var testHandler = new DataReceivedEventHandler(delegate { });
+
+            Assert.Throws<EnergyTrayException>(() => processor.GetAllPowerSchemes());
 
             cmd.Verify(i => i.ExecCommand(
-                It.Is<string>(j => j == @"powercfg.exe /getactivescheme"),
-                It.Is<DataReceivedEventHandler>(j => j == testHandler)));
+                It.Is<string>(j => j == @"powercfg.exe /list"),
+                It.IsAny<DataReceivedEventHandler>()));
+        }
+
+        [Fact]
+        public void GetActivePowerSchemeTest()
+        {
+            var cmd = new Mock<ICmd>();
+            var processor = new PowerProcessor(cmd.Object);
+            var testHandler = new DataReceivedEventHandler(delegate { });
+
+            var inputString = @"
+            Existing Power Schemes (* Active)
+            -----------------------------------
+            Power Scheme GUID: 0688d228-2803-44ee-917d-2e544c763797  (Download)
+            Power Scheme GUID: 381b4222-f694-41f0-9685-ff5bb260df2e  (Balanced)
+            Power Scheme GUID: 49ef8fc0-bb7f-488e-b6a0-f1fc77ec649b  (Dell) *
+            Power Scheme GUID: 8c5e7fda-e8bf-4a96-9a85-a6e23a8c635c  (High performance)
+            Power Scheme GUID: a1841308-3541-4fab-bc81-f71556f20b4a  (Power saver)
+            ";
+
+            cmd.Setup(i => i.ExecCommand(
+                   It.Is<string>(j => j == @"powercfg.exe /list"),
+                   It.IsAny<DataReceivedEventHandler>()))
+               .Returns(inputString);
+
+            var schemes = processor.GetActivePowerScheme();
+
+            Assert.Equal(schemes.Name.Trim(), "Dell");
         }
     }
 }

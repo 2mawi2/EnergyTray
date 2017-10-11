@@ -28,11 +28,24 @@ namespace EnergyTray.Application.PowerManagement
             return _cmd.ExecCommand(@"%windir%\system32\control.exe /name Microsoft.PowerOptions /page");
         }
 
-        public PowerScheme GetActivePowerScheme() => GetAllPowerSchemes().Single(i => i.IsActive);
+        public PowerScheme GetActivePowerScheme()
+        {
+            var scheme = GetAllPowerSchemes().SingleOrDefault(i => i.IsActive);
+            if (scheme == null)
+            {
+                throw new EnergyTrayException("No Active power plan found");
+            }
+            return scheme;
+        }
 
         public IEnumerable<PowerScheme> GetAllPowerSchemes()
         {
-            return StringUtils.GetAllSchemes(_cmd.ExecCommand(@"powercfg.exe /list"));
+            var schemes = StringUtils.GetAllSchemes(_cmd.ExecCommand(@"powercfg.exe /list")).ToList();
+            if (!schemes.Any())
+            {
+                throw new EnergyTrayException("No power plan found");
+            }
+            return schemes;
         }
 
         public EventHandler OnPowerSchemeChange { get; set; } = null;

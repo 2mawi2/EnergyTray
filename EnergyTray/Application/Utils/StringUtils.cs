@@ -21,25 +21,33 @@ namespace EnergyTray.Application.Utils
         {
             var schemes = new List<PowerScheme>();
 
-            using (var reader = new StringReader(inputString))
+            if (inputString != null)
             {
-                string line;
-                while ((line = reader.ReadLine()) != null)
+                using (var reader = new StringReader(inputString))
                 {
-                    if (IsPowerSchemeOutput(line))
+                    string line;
+                    while ((line = reader.ReadLine()) != null)
                     {
-                        line = TrimString(line);
-                        var isActive = CheckIfActiveAndRemoveStar(ref line);
-                        schemes.Add(new PowerScheme
-                        {
-                            Id = line.Remove(36, line.ToCharArray().Length - 36),
-                            Name = line.Remove(0, 36),
-                            IsActive = isActive
-                        });
+                        ProcessLine(line, schemes);
                     }
                 }
             }
             return schemes;
+        }
+
+        private static void ProcessLine(string line, ICollection<PowerScheme> schemes)
+        {
+            if (IsPowerSchemeOutput(line))
+            {
+                line = TrimString(line);
+                var isActive = CheckIfActiveAndRemoveStar(ref line);
+                schemes.Add(new PowerScheme
+                {
+                    Id = line.Remove(36, line.ToCharArray().Length - 36),
+                    Name = line.Remove(0, 36),
+                    IsActive = isActive
+                });
+            }
         }
 
         private static string TrimString(string line)
