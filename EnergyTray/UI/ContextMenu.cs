@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Windows.Forms;
 using EnergyTray.Application;
+using EnergyTray.Application.Extensions;
 using EnergyTray.Application.Model;
 using EnergyTray.Application.PowerManagement;
 using EnergyTray.Worker;
@@ -38,10 +39,7 @@ namespace EnergyTray.UI
         private static ContextMenuStrip CreateMenu(IEnumerable<ToolStripDropDownItem> items)
         {
             var menu = new ContextMenuStrip();
-            foreach (var i in items)
-            {
-                menu.Items.Add(i);
-            }
+            items.ForEach(i => menu.Items.Add(i));
             return menu;
         }
 

@@ -79,6 +79,8 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="App.cs" />
+    <Compile Include="Application\Extensions\EnumerableExtensions.cs" />
+    <Compile Include="Application\IconGenerator\IconGenerator.cs" />
     <Compile Include="Application\Model\PowerScheme.cs" />
     <Compile Include="Application\PowerManagement\Cmd.cs" />
     <Compile Include="Application\PowerManagement\EnergyTrayException.cs" />
