@@ -1,8 +1,11 @@
-﻿using System.ComponentModel;
+﻿using System.Collections.Generic;
+using System.ComponentModel;
 using System.Diagnostics;
+using System.Linq;
 using System.Reflection;
 using System.Windows.Forms;
 using EnergyTray.Application;
+using EnergyTray.Application.Model;
 using EnergyTray.Application.PowerManagement;
 using EnergyTray.Application.Utils;
 using EnergyTray.Properties;
@@ -29,67 +32,25 @@ namespace EnergyTray.UI
             Icon = new NotifyIcon();
         }
 
-        public void Display()
-        {
-            InitIcon();
-            UpdateIcon();
-        }
-
-        private void InitIcon()
+        public void InitializeIcon(IEnumerable<PowerScheme> schemes)
         {
             Icon.MouseUp += OnClick;
             Icon.MouseDoubleClick += OnDoubleClick;
             Icon.Text = Resources.ProcessIcon_Display_Energy_Tray;
             Icon.Visible = true;
-            Icon.ContextMenuStrip = _contextMenu.Create();
+            Icon.ContextMenuStrip = _contextMenu.Create(schemes);
             Icon.Icon = Resources.Icon1;
+            SetActiveScheme(schemes.Single(i => i.IsActive));
         }
 
-        public void UpdateIcon()
+        private void SetActiveScheme(PowerScheme active)
         {
-            _powerProcessor.GetPowerScheme((sender, args) =>
-            {
-                var outputLine = args.Data;
-                if (!string.IsNullOrEmpty(outputLine))
-                {
-                    if (StringUtils.IsPowerSchemeOutput(outputLine))
-                    {
-                        outputLine = StringUtils.GetSchemeId(outputLine);
-                        switch (outputLine)
-                        {
-                            case Global.Download:
-                                Icon.Icon = Resources.Download;
-                                Icon.Text = outputLine.ToString();
-                                break;
-                            case Global.Energysaver:
-                                Icon.Icon = Resources.EnergySaver;
-                                Icon.Text = outputLine.ToString();
-                                break;
-                            case Global.Balanced:
-                                Icon.Icon = Resources.Balanced;
-                                Icon.Text = outputLine.ToString();
-                                break;
-                            case Global.Powermode:
-                                Icon.Icon = Resources.Power;
-                                Icon.Text = outputLine.ToString();
-                                break;
-                            case Global.Dell:
-                                Icon.Icon = Resources.Dell;
-                                Icon.Text = outputLine.ToString();
-                                break;
-                            default:
-                                Icon.Icon = Resources.Dell;
-                                Icon.Text = "Error while loading energy setup";
-                                break;
-                        }
+            Icon.Text = active.Name;
 
-                        if (_monitorCheckWorker.AutoEnabled)
-                        {
-                            Icon.Text = Icon.Text + " (Auto)";
-                        }
-                    }
-                }
-            });
+            if (_monitorCheckWorker.AutoEnabled)
+            {
+                Icon.Text = Icon.Text + " (Auto)";
+            }
         }
 
         public void Dispose() => Icon.Dispose();

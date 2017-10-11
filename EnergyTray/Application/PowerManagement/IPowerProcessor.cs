@@ -6,6 +6,7 @@ namespace EnergyTray.Application.PowerManagement
     {
         void SwitchScheme(string powerSchemeId);
         void OpenOptions();
-        void GetPowerScheme(DataReceivedEventHandler handler);
+        void GetActivePowerScheme(DataReceivedEventHandler handler);
+        void GetAllPowerSchemes(DataReceivedEventHandler handler);
     }
 }

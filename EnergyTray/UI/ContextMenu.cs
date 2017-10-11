@@ -1,6 +1,9 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Windows.Forms;
 using EnergyTray.Application;
+using EnergyTray.Application.Model;
 using EnergyTray.Application.PowerManagement;
 using EnergyTray.Worker;
 
@@ -17,54 +20,54 @@ namespace EnergyTray.UI
             _powerProcessor = powerProcessor;
         }
 
-        public ContextMenuStrip Create()
+        public ContextMenuStrip Create(IEnumerable<PowerScheme> powerSchemes)
         {
-            // Add the default menu options.
+            var items = CreateItems(powerSchemes);
+            return CreateMenu(items);
+        }
+
+        private IEnumerable<ToolStripMenuItem> CreateItems(IEnumerable<PowerScheme> powerSchemes)
+        {
+            var items = new List<ToolStripMenuItem>();
+            items.AddRange(GetPowerSchemeItems(powerSchemes));
+            items.Add(GetAutomaticModeItem());
+            items.Add(new ToolStripMenuItem());
+            items.Add(GetOptionsItem());
+            return items;
+        }
+
+        private static ContextMenuStrip CreateMenu(IEnumerable<ToolStripMenuItem> items)
+        {
             var menu = new ContextMenuStrip();
-            ToolStripSeparator sep;
-            // Windows Explorer.
-            var item = new ToolStripMenuItem {Text = "Download"};
-            item.Click += Download_Click;
-            menu.Items.Add(item);
-            // Windows Explorer.
-            item = new ToolStripMenuItem {Text = "Energy Saver"};
-            item.Click += EnergySaver_Click;
-            menu.Items.Add(item);
-            // About.
-            item = new ToolStripMenuItem {Text = "Power Mode"};
-            item.Click += PowerMode_Click;
-            menu.Items.Add(item);
-            item = new ToolStripMenuItem {Text = "Balanced"};
-            item.Click += Balanced_Click;
-            menu.Items.Add(item);
-            item = new ToolStripMenuItem {Text = "Dell"};
-            item.Click += Dell_Click;
-            menu.Items.Add(item);
-            item = new ToolStripMenuItem {Text = "Automatic Mode"};
-            item.Click += Auto_Click;
-            menu.Items.Add(item);
-            // Separator.
-            sep = new ToolStripSeparator();
-            menu.Items.Add(sep);
-            // Exit.
-            item = new ToolStripMenuItem {Text = "Options"};
-            item.Click += Options_Click;
-            menu.Items.Add(item);
+            foreach (var i in items)
+            {
+                menu.Items.Add(i);
+            }
             return menu;
         }
 
-        private void Auto_Click(object sender, EventArgs e) => _monitorCheckWorker.ToggleAutoEnabled();
+        private ToolStripMenuItem GetAutomaticModeItem()
+        {
+            var item = new ToolStripMenuItem {Text = "Automatic Mode"};
+            item.Click += (sender, e) => _monitorCheckWorker.ToggleAutoEnabled();
+            return item;
+        }
 
-        private void Download_Click(object sender, EventArgs e) => _powerProcessor.SwitchScheme(Global.Download);
+        private ToolStripMenuItem GetOptionsItem()
+        {
+            var item = new ToolStripMenuItem {Text = "Options"};
+            item.Click += (sender, e) => _powerProcessor.OpenOptions();
+            return item;
+        }
 
-        private void EnergySaver_Click(object sender, EventArgs e) => _powerProcessor.SwitchScheme(Global.Energysaver);
-
-        private void PowerMode_Click(object sender, EventArgs e) => _powerProcessor.SwitchScheme(Global.Powermode);
-
-        private void Dell_Click(object sender, EventArgs e) => _powerProcessor.SwitchScheme(Global.Dell);
-
-        private void Balanced_Click(object sender, EventArgs e) => _powerProcessor.SwitchScheme(Global.Balanced);
-
-        private void Options_Click(object sender, EventArgs e) => _powerProcessor.OpenOptions();
+        private IEnumerable<ToolStripMenuItem> GetPowerSchemeItems(IEnumerable<PowerScheme> powerSchemes)
+        {
+            return powerSchemes.Select(i =>
+            {
+                var it = new ToolStripMenuItem {Text = i.Name};
+                it.Click += (sender, e) => _powerProcessor.SwitchScheme(i.Id);
+                return it;
+            });
+        }
     }
 }

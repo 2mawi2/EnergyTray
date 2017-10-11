@@ -45,7 +45,7 @@ namespace EnergyTray.Worker
                     }
                     else
                     {
-                        _powerProcessor.GetPowerScheme((opt, args) =>
+                        _powerProcessor.GetActivePowerScheme((opt, args) =>
                         {
                             var outputLine = args.Data;
                             if (!string.IsNullOrEmpty(outputLine))

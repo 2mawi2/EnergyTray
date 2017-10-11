@@ -1,5 +1,8 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Diagnostics;
+using System.Drawing;
+using EnergyTray.Properties;
 using EnergyTray.UI;
 using StructureMap;
 using static System.Windows.Forms.Application;
@@ -16,14 +19,9 @@ namespace EnergyTray
         {
             EnableVisualStyles();
             SetCompatibleTextRenderingDefault(false);
-
             var container = CreateContainer();
-
-            using (var tray = container.GetInstance<IProcessIcon>())
-            {
-                tray.Display();
-                Run();
-            }
+            var applicationManager = container.GetInstance<IApp>();
+            Run();
         }
 
         private static Container CreateContainer() => new Container(i => i.Scan(_ =>

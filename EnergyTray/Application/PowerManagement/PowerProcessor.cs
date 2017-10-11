@@ -21,9 +21,14 @@ namespace EnergyTray.Application.PowerManagement
             _cmd.ExecCommand(@"%windir%\system32\control.exe /name Microsoft.PowerOptions /page");
         }
 
-        public void GetPowerScheme(DataReceivedEventHandler handler)
+        public void GetActivePowerScheme(DataReceivedEventHandler handler)
         {
             _cmd.ExecCommand(@"powercfg.exe /getactivescheme", handler);
+        }
+        
+        public void GetAllPowerSchemes(DataReceivedEventHandler handler)
+        {
+            _cmd.ExecCommand(@"powercfg.exe /list", handler);
         }
     }
 }
