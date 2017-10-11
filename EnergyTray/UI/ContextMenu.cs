@@ -26,17 +26,16 @@ namespace EnergyTray.UI
             return CreateMenu(items);
         }
 
-        private IEnumerable<ToolStripMenuItem> CreateItems(IEnumerable<PowerScheme> powerSchemes)
+        private IEnumerable<ToolStripDropDownItem> CreateItems(IEnumerable<PowerScheme> powerSchemes)
         {
-            var items = new List<ToolStripMenuItem>();
+            var items = new List<ToolStripDropDownItem>();
             items.AddRange(GetPowerSchemeItems(powerSchemes));
             items.Add(GetAutomaticModeItem());
-            items.Add(new ToolStripMenuItem());
             items.Add(GetOptionsItem());
             return items;
         }
 
-        private static ContextMenuStrip CreateMenu(IEnumerable<ToolStripMenuItem> items)
+        private static ContextMenuStrip CreateMenu(IEnumerable<ToolStripDropDownItem> items)
         {
             var menu = new ContextMenuStrip();
             foreach (var i in items)
