@@ -1,4 +1,8 @@
-﻿using System.Diagnostics;
+﻿using System.Collections.Generic;
+using System.Diagnostics;
+using System.Linq;
+using EnergyTray.Application.Model;
+using EnergyTray.Application.Utils;
 
 namespace EnergyTray.Application.PowerManagement
 {
@@ -21,14 +25,11 @@ namespace EnergyTray.Application.PowerManagement
             return _cmd.ExecCommand(@"%windir%\system32\control.exe /name Microsoft.PowerOptions /page");
         }
 
-        public string GetActivePowerScheme()
+        public PowerScheme GetActivePowerScheme() => GetAllPowerSchemes().Single(i => i.IsActive);
+
+        public IEnumerable<PowerScheme> GetAllPowerSchemes()
         {
-            return _cmd.ExecCommand(@"powercfg.exe /getactivescheme");
-        }
-        
-        public string GetAllPowerSchemes()
-        {
-            return _cmd.ExecCommand(@"powercfg.exe /list");
+            return StringUtils.GetAllSchemes(_cmd.ExecCommand(@"powercfg.exe /list"));
         }
     }
 }

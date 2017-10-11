@@ -3,6 +3,5 @@
     public interface IMonitorCheckWorker
     {
         bool AutoEnabled { get; set; }
-        void ToggleAutoEnabled();
     }
 }

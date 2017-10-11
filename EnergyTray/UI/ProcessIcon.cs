@@ -40,12 +40,13 @@ namespace EnergyTray.UI
             Icon.Visible = true;
             Icon.ContextMenuStrip = _contextMenu.Create(schemes);
             Icon.Icon = Resources.Icon1;
-            SetActiveScheme(schemes.Single(i => i.IsActive));
+            Update();
         }
 
-        private void SetActiveScheme(PowerScheme active)
+        public void Update()
         {
-            Icon.Text = active.Name;
+            var activeScheme = _powerProcessor.GetActivePowerScheme();
+            Icon.Text = activeScheme.Name;
 
             if (_monitorCheckWorker.AutoEnabled)
             {

@@ -25,8 +25,7 @@ namespace EnergyTray
 
         private void GetPowerSchemes()
         {
-            var powerSchemes = StringUtils.GetAllSchemes(_powerProcessor.GetAllPowerSchemes());
-            _processIcon.InitializeIcon(powerSchemes);
+            _processIcon.InitializeIcon(_powerProcessor.GetAllPowerSchemes());
         }
 
         public void Dispose()

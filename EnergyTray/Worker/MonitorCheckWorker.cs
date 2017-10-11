@@ -13,10 +13,9 @@ namespace EnergyTray.Worker
     {
         private readonly IPowerProcessor _powerProcessor;
         private readonly BackgroundWorker _bw = new BackgroundWorker();
+        private bool _autoEnabled = true;
 
-        public bool AutoEnabled { get; set; } = true;
-
-        public void ToggleAutoEnabled() => AutoEnabled = !AutoEnabled;
+        public bool AutoEnabled { get; set; }
 
         public MonitorCheckWorker(IPowerProcessor powerProcessor)
         {
@@ -56,7 +55,7 @@ namespace EnergyTray.Worker
                                                   PowerLineStatus.Online;
 
         private static bool IsExternalMonitorSetup() => Screen.AllScreens.Length > 1;
-
+        
         private void RestartWorkerOnCompleted(object sender, RunWorkerCompletedEventArgs e) => _bw.RunWorkerAsync();
     }
 }

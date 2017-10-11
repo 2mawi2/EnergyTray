@@ -1,4 +1,6 @@
-﻿using System.Diagnostics;
+﻿using System.Collections.Generic;
+using System.Diagnostics;
+using EnergyTray.Application.Model;
 
 namespace EnergyTray.Application.PowerManagement
 {
@@ -6,7 +8,7 @@ namespace EnergyTray.Application.PowerManagement
     {
         string SwitchScheme(string powerSchemeId);
         string OpenOptions();
-        string GetActivePowerScheme();
-        string GetAllPowerSchemes();
+        PowerScheme GetActivePowerScheme();
+        IEnumerable<PowerScheme> GetAllPowerSchemes();
     }
 }

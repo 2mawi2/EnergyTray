@@ -48,7 +48,7 @@ namespace EnergyTray.UI
         private ToolStripMenuItem GetAutomaticModeItem()
         {
             var item = new ToolStripMenuItem {Text = "Automatic Mode"};
-            item.Click += (sender, e) => _monitorCheckWorker.ToggleAutoEnabled();
+            item.Click += (sender, e) => { _monitorCheckWorker.AutoEnabled = !_monitorCheckWorker.AutoEnabled; };
             return item;
         }
 
@@ -64,7 +64,7 @@ namespace EnergyTray.UI
             return powerSchemes.Select(i =>
             {
                 var it = new ToolStripMenuItem {Text = i.Name};
-                it.Click += (sender, e) => _powerProcessor.SwitchScheme(i.Id);
+                it.Click += (sender, e) => { _powerProcessor.SwitchScheme(i.Id); };
                 return it;
             });
         }

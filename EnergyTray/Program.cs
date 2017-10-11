@@ -4,6 +4,7 @@ using System.Diagnostics;
 using System.Drawing;
 using EnergyTray.Properties;
 using EnergyTray.UI;
+using EnergyTray.Worker;
 using StructureMap;
 using static System.Windows.Forms.Application;
 
@@ -24,10 +25,23 @@ namespace EnergyTray
             Run();
         }
 
-        private static Container CreateContainer() => new Container(i => i.Scan(_ =>
+        private static Container CreateContainer()
         {
-            _.TheCallingAssembly();
-            _.WithDefaultConventions();
-        }));
+            var container = new Container(i =>
+            {
+                i.Scan(_ =>
+                {
+                    _.TheCallingAssembly();
+                    _.WithDefaultConventions();
+                });
+
+                i.ForConcreteType<MonitorCheckWorker>().Configure.Singleton();
+                i.ForConcreteType<ProcessIcon>().Configure.Singleton();
+                i.For<IMonitorCheckWorker>().Use(c => c.GetInstance<MonitorCheckWorker>());
+                i.For<IProcessIcon>().Use(c => c.GetInstance<ProcessIcon>());
+            });
+
+            return container;
+        }
     }
 }
