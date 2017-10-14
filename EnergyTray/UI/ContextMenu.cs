@@ -33,7 +33,15 @@ namespace EnergyTray.UI
             items.AddRange(GetPowerSchemeItems(powerSchemes));
             items.Add(GetAutomaticModeItem());
             items.Add(GetOptionsItem());
+            items.Add(GetExitItem());
             return items;
+        }
+
+        private ToolStripDropDownItem GetExitItem()
+        {
+            var item = new ToolStripMenuItem {Text = "Exit"};
+            item.Click += (sender, e) => System.Windows.Forms.Application.Exit();
+            return item;
         }
 
         private static ContextMenuStrip CreateMenu(IEnumerable<ToolStripDropDownItem> items)

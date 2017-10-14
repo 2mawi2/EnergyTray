@@ -33,13 +33,13 @@ namespace EnergyTray.Worker
             _powerProcessor = powerProcessor;
             _bw.WorkerReportsProgress = true;
             _bw.WorkerSupportsCancellation = true;
-            _bw.DoWork += bw_DoWork;
+            _bw.DoWork += Run;
             _bw.RunWorkerCompleted += RestartWorkerOnCompleted;
             _bw.RunWorkerAsync();
         }
 
 
-        private void bw_DoWork(object sender, DoWorkEventArgs e)
+        private void Run(object sender, DoWorkEventArgs e)
         {
             if (sender is BackgroundWorker worker && worker.CancellationPending)
             {
@@ -62,11 +62,20 @@ namespace EnergyTray.Worker
             }
         }
 
-        private static bool IsPowerPluggedIn() => SystemInformation.PowerStatus.PowerLineStatus ==
-                                                  PowerLineStatus.Online;
+        private static bool IsPowerPluggedIn()
+        {
+            return SystemInformation.PowerStatus.PowerLineStatus ==
+                   PowerLineStatus.Online;
+        }
 
-        private static bool IsExternalMonitorSetup() => Screen.AllScreens.Length > 1;
+        private static bool IsExternalMonitorSetup()
+        {
+            return Screen.AllScreens.Length > 1;
+        }
 
-        private void RestartWorkerOnCompleted(object sender, RunWorkerCompletedEventArgs e) => _bw.RunWorkerAsync();
+        private void RestartWorkerOnCompleted(object sender, RunWorkerCompletedEventArgs e)
+        {
+            _bw.RunWorkerAsync();
+        }
     }
 }
