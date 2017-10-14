@@ -20,8 +20,7 @@ namespace EnergyTray
         {
             EnableVisualStyles();
             SetCompatibleTextRenderingDefault(false);
-            var container = CreateContainer();
-            var applicationManager = container.GetInstance<IApp>();
+            CreateContainer().GetInstance<IApp>();
             Run();
         }
 

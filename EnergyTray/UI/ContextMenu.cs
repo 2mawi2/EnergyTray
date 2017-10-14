@@ -37,18 +37,21 @@ namespace EnergyTray.UI
             return items;
         }
 
-        private ToolStripDropDownItem GetExitItem()
-        {
-            var item = new ToolStripMenuItem {Text = "Exit"};
-            item.Click += (sender, e) => System.Windows.Forms.Application.Exit();
-            return item;
-        }
-
         private static ContextMenuStrip CreateMenu(IEnumerable<ToolStripDropDownItem> items)
         {
             var menu = new ContextMenuStrip();
             items.ForEach(i => menu.Items.Add(i));
             return menu;
+        }
+
+        private IEnumerable<ToolStripMenuItem> GetPowerSchemeItems(IEnumerable<PowerScheme> powerSchemes)
+        {
+            return powerSchemes.Select(i =>
+            {
+                var it = new ToolStripMenuItem {Text = i.Name};
+                it.Click += (sender, e) => { _powerProcessor.SwitchScheme(i.Id); };
+                return it;
+            });
         }
 
         private ToolStripMenuItem GetAutomaticModeItem()
@@ -65,14 +68,11 @@ namespace EnergyTray.UI
             return item;
         }
 
-        private IEnumerable<ToolStripMenuItem> GetPowerSchemeItems(IEnumerable<PowerScheme> powerSchemes)
+        private ToolStripDropDownItem GetExitItem()
         {
-            return powerSchemes.Select(i =>
-            {
-                var it = new ToolStripMenuItem {Text = i.Name};
-                it.Click += (sender, e) => { _powerProcessor.SwitchScheme(i.Id); };
-                return it;
-            });
+            var item = new ToolStripMenuItem {Text = "Exit"};
+            item.Click += (sender, e) => System.Windows.Forms.Application.Exit();
+            return item;
         }
     }
 }

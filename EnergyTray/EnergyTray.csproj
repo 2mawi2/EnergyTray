@@ -81,7 +81,6 @@
     <Compile Include="App.cs" />
     <Compile Include="Application\EnergyTrayException.cs" />
     <Compile Include="Application\Extensions\EnumerableExtensions.cs" />
-    <Compile Include="Application\IconGenerator\IconGenerator.cs" />
     <Compile Include="Application\Model\PowerScheme.cs" />
     <Compile Include="Application\PowerManagement\Cmd.cs" />
     <Compile Include="Application\PowerManagement\ICmd.cs" />
@@ -92,11 +91,11 @@
     <Compile Include="UI\IContextMenu.cs" />
     <Compile Include="UI\IProcessIcon.cs" />
     <Compile Include="UI\ContextMenu.cs" />
-    <Compile Include="UI\Form1.cs">
+    <Compile Include="UI\SelectIconsForm.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="UI\Form1.Designer.cs">
-      <DependentUpon>Form1.cs</DependentUpon>
+    <Compile Include="UI\SelectIconsForm.Designer.cs">
+      <DependentUpon>SelectIconsForm.cs</DependentUpon>
     </Compile>
     <Compile Include="Application\Global.cs" />
     <Compile Include="Worker\IMonitorCheckWorker.cs" />
@@ -105,8 +104,8 @@
     <Compile Include="UI\ProcessIcon.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <EmbeddedResource Include="UI\Form1.resx">
-      <DependentUpon>Form1.cs</DependentUpon>
+    <EmbeddedResource Include="UI\SelectIconsForm.resx">
+      <DependentUpon>SelectIconsForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
