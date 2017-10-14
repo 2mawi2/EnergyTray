@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using System.Windows.Forms;
 using EnergyTray.Application;
@@ -21,18 +20,19 @@ namespace EnergyTray.UI
             _powerProcessor = powerProcessor;
         }
 
-        public ContextMenuStrip Create(IEnumerable<PowerScheme> powerSchemes)
+        public ContextMenuStrip Create()
         {
-            var items = CreateItems(powerSchemes);
+            var items = CreateItems();
             return CreateMenu(items);
         }
 
-        private IEnumerable<ToolStripDropDownItem> CreateItems(IEnumerable<PowerScheme> powerSchemes)
+        private IEnumerable<ToolStripDropDownItem> CreateItems()
         {
             var items = new List<ToolStripDropDownItem>();
-            items.AddRange(GetPowerSchemeItems(powerSchemes));
+            items.AddRange(GetPowerSchemeItems(_powerProcessor.GetAllPowerSchemes()));
             items.Add(GetAutomaticModeItem());
             items.Add(GetOptionsItem());
+            items.Add(GetIconSectionItem());
             items.Add(GetExitItem());
             return items;
         }
@@ -48,31 +48,33 @@ namespace EnergyTray.UI
         {
             return powerSchemes.Select(i =>
             {
-                var it = new ToolStripMenuItem {Text = i.Name};
-                it.Click += (sender, e) => { _powerProcessor.SwitchScheme(i.Id); };
-                return it;
+                return ToolStripItemFactory.Create(i.Name, (sender, e) => _powerProcessor.SwitchScheme(i.Id));
             });
         }
 
         private ToolStripMenuItem GetAutomaticModeItem()
         {
-            var item = new ToolStripMenuItem {Text = "Automatic Mode"};
-            item.Click += (sender, e) => { _monitorCheckWorker.AutoEnabled = !_monitorCheckWorker.AutoEnabled; };
-            return item;
+            return ToolStripItemFactory.Create("Automatic Mode",
+                (sender, e) => _monitorCheckWorker.AutoEnabled = !_monitorCheckWorker.AutoEnabled);
         }
 
         private ToolStripMenuItem GetOptionsItem()
         {
-            var item = new ToolStripMenuItem {Text = "Options"};
-            item.Click += (sender, e) => _powerProcessor.OpenOptions();
-            return item;
+            return ToolStripItemFactory.Create("Power Options", (sender, e) => _powerProcessor.OpenOptions());
         }
 
-        private ToolStripDropDownItem GetExitItem()
+        private ToolStripDropDownItem GetIconSectionItem()
         {
-            var item = new ToolStripMenuItem {Text = "Exit"};
-            item.Click += (sender, e) => System.Windows.Forms.Application.Exit();
-            return item;
+            return ToolStripItemFactory.Create("Select Icons", (sender, e) =>
+            {
+                var form = new SelectIconsForm(_powerProcessor);
+                form.Show();
+            });
+        }
+
+        private static ToolStripMenuItem GetExitItem()
+        {
+            return ToolStripItemFactory.Create("Exit", (sender, e) => System.Windows.Forms.Application.Exit());
         }
     }
 }

@@ -36,13 +36,13 @@ namespace EnergyTray.UI
         }
 
 
-        public void InitializeIcon(IEnumerable<PowerScheme> schemes)
+        public void InitializeIcon()
         {
             Icon.MouseUp += OnClick;
             Icon.MouseDoubleClick += OnDoubleClick;
             Icon.Text = Resources.ProcessIcon_Display_Energy_Tray;
             Icon.Visible = true;
-            Icon.ContextMenuStrip = _contextMenu.Create(schemes);
+            Icon.ContextMenuStrip = _contextMenu.Create();
             Icon.Icon = Resources.Icon1;
             Update();
         }

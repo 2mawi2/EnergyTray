@@ -98,6 +98,7 @@
       <DependentUpon>SelectIconsForm.cs</DependentUpon>
     </Compile>
     <Compile Include="Application\Global.cs" />
+    <Compile Include="UI\ToolStripItemFactory.cs" />
     <Compile Include="Worker\IMonitorCheckWorker.cs" />
     <Compile Include="Worker\MonitorCheckWorker.cs" />
     <Compile Include="Worker\ProcessWorker.cs" />

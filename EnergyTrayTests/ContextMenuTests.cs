@@ -44,15 +44,16 @@ namespace EnergyTrayTests
 
         [Theory]
         [InlineData("Exit")]
-        [InlineData("Options")]
+        [InlineData("Power Options")]
         [InlineData("Automatic Mode")]
         [InlineData("Name")]
         [InlineData("Name2")]
+        [InlineData("Select Icons")]
         public void CreateTest_ContainsAllExpectedItems(string expectedItemText)
         {
-            var schemes = CreateTestSchemes();
+            _powerProcessor.Setup(i => i.GetAllPowerSchemes()).Returns(CreateTestSchemes());
 
-            var result = CreateContextMenu().Create(schemes);
+            var result = CreateContextMenu().Create();
 
             Assert.True(result.Items.Cast<ToolStripItem>().ToArray().Any(i => i.Text == expectedItemText));
         }

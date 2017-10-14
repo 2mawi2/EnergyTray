@@ -6,6 +6,6 @@ namespace EnergyTray.UI
 {
     public interface IContextMenu
     {
-        ContextMenuStrip Create(IEnumerable<PowerScheme> powerSchemes);
+        ContextMenuStrip Create();
     }
 }
