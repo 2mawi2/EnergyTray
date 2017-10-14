@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Drawing;
 using System.IO;
 using System.Linq;
 using System.Windows.Forms;
@@ -17,7 +18,7 @@ namespace EnergyTray.UI
             InitializeComponent();
         }
 
-        private void SelectIconsForm_Load(object sender, System.EventArgs e)
+        private void SelectIconsForm_Load(object sender, EventArgs e)
         {
             var powerschemes = _powerProcessor.GetAllPowerSchemes().ToList();
             var activeScheme = powerschemes.Single(j => j.IsActive);
@@ -37,7 +38,12 @@ namespace EnergyTray.UI
 
             if (openFileDialog.ShowDialog() == DialogResult.OK)
             {
-                TryReadSelectedFile(openFileDialog);
+                var file = TryCopySelectedFile(openFileDialog);
+
+                using (var imageStream = new FileStream(file, FileMode.Open, FileAccess.Read))
+                {
+                    pictureBox1.Image = Image.FromStream(imageStream);
+                }
             }
         }
 
@@ -53,23 +59,30 @@ namespace EnergyTray.UI
             return openFileDialog;
         }
 
-        private static void TryReadSelectedFile(OpenFileDialog openFileDialog)
+        private static string TryCopySelectedFile(OpenFileDialog openFileDialog)
         {
-            Stream fileStream;
             try
             {
-                if ((fileStream = openFileDialog.OpenFile()) != null)
+                using (var sourceStream = openFileDialog.OpenFile())
                 {
-                    using (fileStream)
-                    {
-                        //TODO read icon file and persist somewhere
-                        //TODO show icon file on pictureBox
-                    }
+                    return CopyFile(openFileDialog.SafeFileName, sourceStream);
                 }
             }
             catch (Exception ex)
             {
                 MessageBox.Show("Error: Could not read file from disk. Original error: " + ex.Message);
+            }
+            return null;
+        }
+
+        private static string CopyFile(string fileName, Stream sourceStream)
+        {
+            var fileLocation = System.Windows.Forms.Application.ExecutablePath.Replace("EnergyTray.exe", "") + fileName;
+            using (var destinationStream = new FileStream(fileLocation, FileMode.OpenOrCreate, FileAccess.ReadWrite))
+            {
+                sourceStream.CopyTo(destinationStream);
+                sourceStream.Flush();
+                return fileLocation;
             }
         }
 
@@ -79,17 +92,6 @@ namespace EnergyTray.UI
 
         private void pictureBox1_Click(object sender, System.EventArgs e)
         {
-        }
-    }
-
-    public class ComboboxItem
-    {
-        public string Text { get; set; }
-        public object Value { get; set; }
-
-        public override string ToString()
-        {
-            return Text;
         }
     }
 }
