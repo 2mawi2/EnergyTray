@@ -5,5 +5,6 @@ namespace EnergyTray.Application.AppSettings
     public class EnergyTraySetttings : AppSettings<EnergyTraySetttings>
     {
         public readonly Dictionary<string, string> PowerSchemeIconMap = new Dictionary<string, string>();
+        public bool IsAutoChangerEnabled { get; set; }
     }
 }

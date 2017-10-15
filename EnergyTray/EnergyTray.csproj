@@ -86,6 +86,8 @@
     <Compile Include="Application\AppSettings\EnergyTraySetttings.cs" />
     <Compile Include="Application\AppSettings\IconSettings.cs" />
     <Compile Include="Application\AppSettings\IIconSettings.cs" />
+    <Compile Include="Application\AppSettings\IWorkerSettings.cs" />
+    <Compile Include="Application\AppSettings\WorkerSettings.cs" />
     <Compile Include="Application\Exceptions\EnergyTrayException.cs" />
     <Compile Include="Application\Exceptions\ExceptionHandler.cs" />
     <Compile Include="Application\Extensions\EnumerableExtensions.cs" />
@@ -110,7 +112,6 @@
     <Compile Include="UI\ToolStripItemFactory.cs" />
     <Compile Include="Worker\IMonitorCheckWorker.cs" />
     <Compile Include="Worker\MonitorCheckWorker.cs" />
-    <Compile Include="Worker\ProcessWorker.cs" />
     <Compile Include="UI\ProcessIcon.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

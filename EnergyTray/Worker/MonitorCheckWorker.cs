@@ -4,6 +4,7 @@ using System.Diagnostics;
 using System.Linq;
 using System.Windows.Forms;
 using EnergyTray.Application;
+using EnergyTray.Application.AppSettings;
 using EnergyTray.Application.PowerManagement;
 using EnergyTray.UI;
 
@@ -12,25 +13,25 @@ namespace EnergyTray.Worker
     public class MonitorCheckWorker : IMonitorCheckWorker
     {
         private readonly IPowerProcessor _powerProcessor;
+        private readonly IWorkerSettings _workerSettings;
         private readonly BackgroundWorker _bw = new BackgroundWorker();
-        private bool _autoEnabled = true;
-        private bool _autoEnabled1;
 
         public bool AutoEnabled
         {
-            get { return _autoEnabled1; }
+            get => _workerSettings.IsAutoChangerEnabled;
             set
             {
-                _autoEnabled1 = value;
+                _workerSettings.IsAutoChangerEnabled = value;
                 OnAutoChanged.Invoke(null, EventArgs.Empty);
             }
         }
 
         public EventHandler OnAutoChanged { get; set; }
 
-        public MonitorCheckWorker(IPowerProcessor powerProcessor)
+        public MonitorCheckWorker(IPowerProcessor powerProcessor, IWorkerSettings workerSettings)
         {
             _powerProcessor = powerProcessor;
+            _workerSettings = workerSettings;
             _bw.WorkerReportsProgress = true;
             _bw.WorkerSupportsCancellation = true;
             _bw.DoWork += Run;
@@ -55,7 +56,7 @@ namespace EnergyTray.Worker
                     }
                     else
                     {
-                        _powerProcessor.GetActivePowerScheme();
+                        _powerProcessor.SwitchScheme(_powerProcessor.GetActivePowerScheme().Id);
                     }
                 }
                 System.Threading.Thread.Sleep(4000);

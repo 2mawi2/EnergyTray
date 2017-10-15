@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using System.Windows.Forms;
+using System.Windows.Forms.VisualStyles;
 using EnergyTray.Application;
 using EnergyTray.Application.AppSettings;
 using EnergyTray.Application.Extensions;
@@ -32,18 +33,19 @@ namespace EnergyTray.UI
             return CreateMenu(items);
         }
 
-        private IEnumerable<ToolStripDropDownItem> CreateItems()
+        private IEnumerable<ToolStripItem> CreateItems()
         {
-            var items = new List<ToolStripDropDownItem>();
+            var items = new List<ToolStripItem>();
             items.AddRange(GetPowerSchemeItems(_powerProcessor.GetAllPowerSchemes()));
             items.Add(GetAutomaticModeItem());
+            items.Add(new ToolStripSeparator());
             items.Add(GetOptionsItem());
             items.Add(GetIconSectionItem());
             items.Add(GetExitItem());
             return items;
         }
 
-        private static ContextMenuStrip CreateMenu(IEnumerable<ToolStripDropDownItem> items)
+        private static ContextMenuStrip CreateMenu(IEnumerable<ToolStripItem> items)
         {
             var menu = new ContextMenuStrip();
             items.ForEach(i => menu.Items.Add(i));
