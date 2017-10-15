@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Dynamic;
 using System.Linq;
 using System.Windows.Forms;
+using EnergyTray.Application.AppSettings;
 using EnergyTray.Application.Model;
 using EnergyTray.Application.PowerManagement;
 using EnergyTray.UI;
@@ -17,10 +18,11 @@ namespace EnergyTrayTests
     {
         private Mock<IMonitorCheckWorker> _monitorCheckWorker = new Mock<IMonitorCheckWorker>();
         private Mock<IPowerProcessor> _powerProcessor = new Mock<IPowerProcessor>();
+        private Mock<IIconSettings> _iconSettings = new Mock<IIconSettings>();
 
         public IContextMenu CreateContextMenu()
         {
-            return new ContextMenu(_monitorCheckWorker.Object, _powerProcessor.Object);
+            return new ContextMenu(_monitorCheckWorker.Object, _powerProcessor.Object, _iconSettings.Object);
         }
 
         private static IEnumerable<PowerScheme> CreateTestSchemes()

@@ -4,6 +4,8 @@ using System.IO;
 using System.Linq;
 using System.Windows.Forms;
 using System.Windows.Forms.VisualStyles;
+using EnergyTray.Application.AppSettings;
+using EnergyTray.Application.Model;
 using EnergyTray.Application.PowerManagement;
 
 namespace EnergyTray.UI
@@ -11,10 +13,12 @@ namespace EnergyTray.UI
     public partial class SelectIconsForm : Form
     {
         private readonly IPowerProcessor _powerProcessor;
+        private readonly IIconSettings _iconSettings;
 
-        public SelectIconsForm(IPowerProcessor powerProcessor)
+        public SelectIconsForm(IPowerProcessor powerProcessor, IIconSettings iconSettings)
         {
             _powerProcessor = powerProcessor;
+            _iconSettings = iconSettings;
             InitializeComponent();
         }
 
@@ -32,15 +36,29 @@ namespace EnergyTray.UI
             comboBox1.SelectedIndex = comboBox1.FindStringExact(activeScheme.Name);
         }
 
-        private void button1_Click(object sender, System.EventArgs e)
+        private PowerScheme GetSelectedPowerScheme()
+        {
+            var item = (ComboboxItem) comboBox1.SelectedItem;
+            var selectedScheme = _powerProcessor.GetAllPowerSchemes().Single(i => i.Name == item.Text);
+            return selectedScheme;
+        }
+
+        private void button1_Click(object sender, EventArgs e)
         {
             var openFileDialog = CreateOpenFileDialog();
 
             if (openFileDialog.ShowDialog() == DialogResult.OK)
             {
                 var file = TryCopySelectedFile(openFileDialog);
-                pictureBox1.Image = Bitmap.FromHicon(new Icon(file, new Size(pictureBox1.Width, pictureBox1.Height)).Handle);
+                SetPictureBoxImage(file);
+                _iconSettings.SaveIcon(GetSelectedPowerScheme().Id, file);
             }
+        }
+
+        private void SetPictureBoxImage(string file)
+        {
+            pictureBox1.Image =
+                Bitmap.FromHicon(new Icon(file, new Size(pictureBox1.Width, pictureBox1.Height)).Handle);
         }
 
         private static OpenFileDialog CreateOpenFileDialog()

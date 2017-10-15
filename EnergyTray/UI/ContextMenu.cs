@@ -2,6 +2,7 @@
 using System.Linq;
 using System.Windows.Forms;
 using EnergyTray.Application;
+using EnergyTray.Application.AppSettings;
 using EnergyTray.Application.Extensions;
 using EnergyTray.Application.Model;
 using EnergyTray.Application.PowerManagement;
@@ -13,11 +14,13 @@ namespace EnergyTray.UI
     {
         private readonly IMonitorCheckWorker _monitorCheckWorker;
         private readonly IPowerProcessor _powerProcessor;
+        private readonly IIconSettings _iconSettings;
 
-        public ContextMenu(IMonitorCheckWorker monitorCheckWorker, IPowerProcessor powerProcessor)
+        public ContextMenu(IMonitorCheckWorker monitorCheckWorker, IPowerProcessor powerProcessor, IIconSettings iconSettings)
         {
             _monitorCheckWorker = monitorCheckWorker;
             _powerProcessor = powerProcessor;
+            _iconSettings = iconSettings;
         }
 
         public ContextMenuStrip Create()
@@ -67,7 +70,7 @@ namespace EnergyTray.UI
         {
             return ToolStripItemFactory.Create("Select Icons", (sender, e) =>
             {
-                var form = new SelectIconsForm(_powerProcessor);
+                var form = new SelectIconsForm(_powerProcessor, _iconSettings);
                 form.Show();
             });
         }

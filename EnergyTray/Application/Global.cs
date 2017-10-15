@@ -7,5 +7,6 @@ namespace EnergyTray.Application
         public const string Powermode = "8c5e7fda-e8bf-4a96-9a85-a6e23a8c635c";
         public const string Balanced = "381b4222-f694-41f0-9685-ff5bb260df2e";
         public const string Dell = "49ef8fc0-bb7f-488e-b6a0-f1fc77ec649b";
+        public const string DefaultFilename = "settings.json";
     }
 }
