@@ -2,6 +2,7 @@
 using System.Drawing;
 using System.IO;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using System.Windows.Forms;
 using System.Windows.Forms.VisualStyles;
 using EnergyTray.Application.AppSettings;
@@ -73,7 +74,7 @@ namespace EnergyTray.UI
             return openFileDialog;
         }
 
-        private static string TryCopySelectedFile(OpenFileDialog openFileDialog)
+        private string TryCopySelectedFile(OpenFileDialog openFileDialog)
         {
             try
             {
@@ -85,8 +86,9 @@ namespace EnergyTray.UI
             catch (Exception ex)
             {
                 MessageBox.Show("Error: Could not read file from disk. Original error: " + ex.Message);
+                Close();
+                throw new EnergyTrayException(ex);
             }
-            return null;
         }
 
         private static string CopyFile(string fileName, Stream sourceStream)
@@ -100,8 +102,20 @@ namespace EnergyTray.UI
             }
         }
 
-        private void comboBox1_SelectedIndexChanged(object sender, System.EventArgs e)
+        private void comboBox1_SelectedIndexChanged(object sender, EventArgs e)
         {
+            var selectedScheme = GetSelectedPowerScheme();
+            var file = _iconSettings.GetIconById(selectedScheme.Id);
+            if (file != null)
+                SetPictureBoxImage(file);
+            else
+                ResetPictureBoxImage();
+        }
+
+        private void ResetPictureBoxImage()
+        {
+            pictureBox1.Image = null;
+            pictureBox1.InitialImage = null;
         }
 
         private void pictureBox1_Click(object sender, System.EventArgs e)

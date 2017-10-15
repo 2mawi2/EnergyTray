@@ -16,7 +16,8 @@ namespace EnergyTray.UI
         private readonly IPowerProcessor _powerProcessor;
         private readonly IIconSettings _iconSettings;
 
-        public ContextMenu(IMonitorCheckWorker monitorCheckWorker, IPowerProcessor powerProcessor, IIconSettings iconSettings)
+        public ContextMenu(IMonitorCheckWorker monitorCheckWorker, IPowerProcessor powerProcessor,
+            IIconSettings iconSettings)
         {
             _monitorCheckWorker = monitorCheckWorker;
             _powerProcessor = powerProcessor;

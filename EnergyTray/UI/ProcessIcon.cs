@@ -2,10 +2,12 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Diagnostics;
+using System.Drawing;
 using System.Linq;
 using System.Reflection;
 using System.Windows.Forms;
 using EnergyTray.Application;
+using EnergyTray.Application.AppSettings;
 using EnergyTray.Application.Model;
 using EnergyTray.Application.PowerManagement;
 using EnergyTray.Application.Utils;
@@ -19,17 +21,20 @@ namespace EnergyTray.UI
         private readonly IMonitorCheckWorker _monitorCheckWorker;
         private readonly IContextMenu _contextMenu;
         private readonly IPowerProcessor _powerProcessor;
+        private readonly IIconSettings _iconSettings;
 
         private NotifyIcon Icon { get; }
 
         public ProcessIcon(
             IMonitorCheckWorker monitorCheckWorker,
             IContextMenu contextMenu,
-            IPowerProcessor powerProcessor)
+            IPowerProcessor powerProcessor,
+            IIconSettings iconSettings)
         {
             _monitorCheckWorker = monitorCheckWorker;
             _contextMenu = contextMenu;
             _powerProcessor = powerProcessor;
+            _iconSettings = iconSettings;
             _powerProcessor.OnPowerSchemeChange += (sender, e) => Update();
             monitorCheckWorker.OnAutoChanged = (sender, e) => Update();
             Icon = new NotifyIcon();
@@ -47,15 +52,26 @@ namespace EnergyTray.UI
             Update();
         }
 
-        public void Update()
+        private void Update()
         {
             var activeScheme = _powerProcessor.GetActivePowerScheme();
-            Icon.Text = activeScheme.Name;
+            UpdateIconText(activeScheme);
+            UpdateIconImage(activeScheme);
+        }
 
+        private void UpdateIconText(PowerScheme activeScheme)
+        {
+            Icon.Text = activeScheme.Name;
             if (_monitorCheckWorker.AutoEnabled)
             {
                 Icon.Text = Icon.Text + " (Auto)";
             }
+        }
+
+        private void UpdateIconImage(PowerScheme activeScheme)
+        {
+            var icon = _iconSettings.GetIconById(activeScheme.Id);
+            Icon.Icon = icon != null ? new Icon(icon) : Resources.Icon1;
         }
 
         public void Dispose() => Icon.Dispose();

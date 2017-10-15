@@ -6,7 +6,11 @@ namespace EnergyTray.Application.PowerManagement
     {
         public EnergyTrayException(string message) : base(message)
         {
-            
+        }
+
+        public EnergyTrayException(Exception exception) : base(exception.Message, exception)
+        {
+          
         }
     }
 }
