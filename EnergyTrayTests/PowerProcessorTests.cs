@@ -2,6 +2,7 @@
 using System.Diagnostics;
 using System.Runtime.CompilerServices;
 using EnergyTray;
+using EnergyTray.Application.Exceptions;
 using EnergyTray.Application.PowerManagement;
 using EnergyTray.Worker;
 using Moq;

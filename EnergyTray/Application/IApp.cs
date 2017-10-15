@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace EnergyTray
+namespace EnergyTray.Application
 {
     public interface IApp : IDisposable
     {

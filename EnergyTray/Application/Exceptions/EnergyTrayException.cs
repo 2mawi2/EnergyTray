@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace EnergyTray.Application.PowerManagement
+namespace EnergyTray.Application.Exceptions
 {
     public class EnergyTrayException : Exception
     {

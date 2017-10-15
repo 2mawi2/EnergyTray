@@ -1,14 +1,6 @@
-﻿using System;
-using System.Diagnostics;
-using System.Drawing;
-using System.Linq;
-using EnergyTray.Application;
-using EnergyTray.Application.Model;
-using EnergyTray.Application.Utils;
-using EnergyTray.Properties;
-using EnergyTray.UI;
+﻿using EnergyTray.UI;
 
-namespace EnergyTray
+namespace EnergyTray.Application
 {
     public class App : IApp
     {

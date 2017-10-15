@@ -81,21 +81,21 @@
     <Reference Include="System.Windows.Forms" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="App.cs" />
+    <Compile Include="Application\App.cs" />
     <Compile Include="Application\AppSettings\AppSettings.cs" />
     <Compile Include="Application\AppSettings\EnergyTraySetttings.cs" />
     <Compile Include="Application\AppSettings\IconSettings.cs" />
     <Compile Include="Application\AppSettings\IIconSettings.cs" />
-    <Compile Include="Application\EnergyTrayException.cs" />
+    <Compile Include="Application\Exceptions\EnergyTrayException.cs" />
+    <Compile Include="Application\Exceptions\ExceptionHandler.cs" />
     <Compile Include="Application\Extensions\EnumerableExtensions.cs" />
+    <Compile Include="Application\IApp.cs" />
     <Compile Include="Application\Model\PowerScheme.cs" />
     <Compile Include="Application\PowerManagement\Cmd.cs" />
     <Compile Include="Application\PowerManagement\ICmd.cs" />
     <Compile Include="Application\PowerManagement\IPowerProcessor.cs" />
     <Compile Include="Application\PowerManagement\PowerProcessor.cs" />
     <Compile Include="Application\Utils\StringUtils.cs" />
-    <Compile Include="ExceptionHandler.cs" />
-    <Compile Include="IApp.cs" />
     <Compile Include="UI\ComboboxItem.cs" />
     <Compile Include="UI\IContextMenu.cs" />
     <Compile Include="UI\IProcessIcon.cs" />

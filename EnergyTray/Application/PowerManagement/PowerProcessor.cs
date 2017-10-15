@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
+using EnergyTray.Application.Exceptions;
 using EnergyTray.Application.Model;
 using EnergyTray.Application.Utils;
 

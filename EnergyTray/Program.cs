@@ -4,6 +4,8 @@ using System.Diagnostics;
 using System.Drawing;
 using System.Threading;
 using System.Windows.Forms;
+using EnergyTray.Application;
+using EnergyTray.Application.Exceptions;
 using EnergyTray.Properties;
 using EnergyTray.UI;
 using EnergyTray.Worker;
