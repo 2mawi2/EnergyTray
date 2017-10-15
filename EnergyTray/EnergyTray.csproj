@@ -87,6 +87,7 @@
     <Compile Include="Application\PowerManagement\IPowerProcessor.cs" />
     <Compile Include="Application\PowerManagement\PowerProcessor.cs" />
     <Compile Include="Application\Utils\StringUtils.cs" />
+    <Compile Include="ExceptionHandler.cs" />
     <Compile Include="IApp.cs" />
     <Compile Include="UI\ComboboxItem.cs" />
     <Compile Include="UI\IContextMenu.cs" />

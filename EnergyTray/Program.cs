@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Drawing;
+using System.Threading;
+using System.Windows.Forms;
 using EnergyTray.Properties;
 using EnergyTray.UI;
 using EnergyTray.Worker;
@@ -20,8 +22,16 @@ namespace EnergyTray
         {
             EnableVisualStyles();
             SetCompatibleTextRenderingDefault(false);
+            ConfigureErrorHandling();
             CreateContainer().GetInstance<IApp>();
             Run();
+        }
+
+        private static void ConfigureErrorHandling()
+        {
+            ThreadException += ExceptionHandler.ErrorHandler;
+            SetUnhandledExceptionMode(UnhandledExceptionMode.CatchException);
+            AppDomain.CurrentDomain.UnhandledException += ExceptionHandler.UnhandledException;
         }
 
         private static Container CreateContainer()

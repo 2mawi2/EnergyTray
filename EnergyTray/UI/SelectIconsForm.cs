@@ -39,11 +39,7 @@ namespace EnergyTray.UI
             if (openFileDialog.ShowDialog() == DialogResult.OK)
             {
                 var file = TryCopySelectedFile(openFileDialog);
-
-                using (var imageStream = new FileStream(file, FileMode.Open, FileAccess.Read))
-                {
-                    pictureBox1.Image = Image.FromStream(imageStream);
-                }
+                pictureBox1.Image = Bitmap.FromHicon(new Icon(file, new Size(pictureBox1.Width, pictureBox1.Height)).Handle);
             }
         }
 
