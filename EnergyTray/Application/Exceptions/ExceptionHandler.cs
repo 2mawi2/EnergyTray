@@ -15,7 +15,7 @@ namespace EnergyTray.Application.Exceptions
             HandleException(e.Exception);
         }
 
-        public static void HandleException(Exception ex)
+        private static void HandleException(Exception ex)
         {
             Console.WriteLine($"Exception: {ex}, " +
                               $"message: {ex.Message} , " +

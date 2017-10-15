@@ -14,59 +14,55 @@ namespace EnergyTrayTests
 {
     public class PowerProcessorTests
     {
+        private readonly Mock<ICmd> _cmd = new Mock<ICmd>();
+
+
         [Theory, AutoData]
         public void SwitchSchemeTest(string schemeId)
         {
-            var cmd = new Mock<ICmd>();
-            var processor = new PowerProcessor(cmd.Object);
+            var processor = new PowerProcessor(_cmd.Object);
 
             processor.SwitchScheme(schemeId);
 
-            cmd.Verify(i => i.ExecCommand(
+            _cmd.Verify(i => i.ExecCommand(
                 It.Is<string>(j => j == $"powercfg.exe /s {schemeId}")));
         }
 
         [Theory, AutoData]
         public void OpenOptionsTest()
         {
-            var cmd = new Mock<ICmd>();
-            var processor = new PowerProcessor(cmd.Object);
+            var processor = new PowerProcessor(_cmd.Object);
 
             processor.OpenOptions();
 
-            cmd.Verify(i => i.ExecCommand(
+            _cmd.Verify(i => i.ExecCommand(
                 It.Is<string>(j => j == @"%windir%\system32\control.exe /name Microsoft.PowerOptions /page")));
-        }
-
-        [Fact]
-        public void GetActivePowerSchemeTest_Throws()
-        {
-            var cmd = new Mock<ICmd>();
-            var processor = new PowerProcessor(cmd.Object);
-            var testHandler = new DataReceivedEventHandler(delegate { });
-
-            Assert.Throws<EnergyTrayException>(() => processor.GetActivePowerScheme());
         }
 
         [Fact]
         public void GetAllPowerSchemesTest_ThrowsIfNoActiveSchemeFound()
         {
-            var cmd = new Mock<ICmd>();
-            var processor = new PowerProcessor(cmd.Object);
-            var testHandler = new DataReceivedEventHandler(delegate { });
+            var processor = new PowerProcessor(_cmd.Object);
 
             Assert.Throws<EnergyTrayException>(() => processor.GetAllPowerSchemes());
 
-            cmd.Verify(i => i.ExecCommand(
+            _cmd.Verify(i => i.ExecCommand(
                 It.Is<string>(j => j == @"powercfg.exe /list")));
         }
 
         [Fact]
+        public void GetActivePowerSchemeTest_Throws()
+        {
+            var processor = new PowerProcessor(_cmd.Object);
+
+            Assert.Throws<EnergyTrayException>(() => processor.GetActivePowerScheme());
+        }
+
+
+        [Fact]
         public void GetActivePowerSchemeTest()
         {
-            var cmd = new Mock<ICmd>();
-            var processor = new PowerProcessor(cmd.Object);
-            var testHandler = new DataReceivedEventHandler(delegate { });
+            var processor = new PowerProcessor(_cmd.Object);
 
             var inputString = @"
             Existing Power Schemes (* Active)
@@ -78,9 +74,8 @@ namespace EnergyTrayTests
             Power Scheme GUID: a1841308-3541-4fab-bc81-f71556f20b4a  (Power saver)
             ";
 
-            cmd.Setup(i => i.ExecCommand(
-                   It.Is<string>(j => j == @"powercfg.exe /list")))
-               .Returns(inputString);
+            _cmd.Setup(i => i.ExecCommand(It.Is<string>(j => j == @"powercfg.exe /list")))
+                .Returns(inputString);
 
             var schemes = processor.GetActivePowerScheme();
 

@@ -28,8 +28,13 @@ namespace EnergyTrayTests
         }
 
 
-        [Fact]
-        public void GetAllSchemesTest()
+        [Theory]
+        [InlineData("0688d228-2803-44ee-917d-2e544c763797")]
+        [InlineData("381b4222-f694-41f0-9685-ff5bb260df2e")]
+        [InlineData("49ef8fc0-bb7f-488e-b6a0-f1fc77ec649b")]
+        [InlineData("8c5e7fda-e8bf-4a96-9a85-a6e23a8c635c")]
+        [InlineData("a1841308-3541-4fab-bc81-f71556f20b4a")]
+        public void GetAllSchemesTest(string expectedSchemeId)
         {
             var inputString = @"
             Existing Power Schemes (* Active)
@@ -43,16 +48,17 @@ namespace EnergyTrayTests
 
             var shemes = StringUtils.GetAllSchemes(inputString).ToList();
 
-            Assert.Contains(shemes, scheme => scheme.Id == "0688d228-2803-44ee-917d-2e544c763797");
-            Assert.Contains(shemes, scheme => scheme.Id == "381b4222-f694-41f0-9685-ff5bb260df2e");
-            Assert.Contains(shemes, scheme => scheme.Id == "49ef8fc0-bb7f-488e-b6a0-f1fc77ec649b");
-            Assert.Contains(shemes, scheme => scheme.Id == "8c5e7fda-e8bf-4a96-9a85-a6e23a8c635c");
-            Assert.Contains(shemes, scheme => scheme.Id == "a1841308-3541-4fab-bc81-f71556f20b4a");
+            Assert.Contains(shemes, scheme => scheme.Id == expectedSchemeId);
         }
 
 
-        [Fact]
-        public void GetAllSchemesTest_FullOutput()
+        [Theory]
+        [InlineData("0688d228-2803-44ee-917d-2e544c763797")]
+        [InlineData("381b4222-f694-41f0-9685-ff5bb260df2e")]
+        [InlineData("49ef8fc0-bb7f-488e-b6a0-f1fc77ec649b")]
+        [InlineData("8c5e7fda-e8bf-4a96-9a85-a6e23a8c635c")]
+        [InlineData("a1841308-3541-4fab-bc81-f71556f20b4a")]
+        public void GetAllSchemesTest_FullOutput(string expectedSchemeId)
         {
             var inputString =
                 @"Microsoft Windows [Version 10.0.15063]
@@ -72,21 +78,17 @@ namespace EnergyTrayTests
                 ";
             var shemes = StringUtils.GetAllSchemes(inputString).ToList();
 
-            Assert.Contains(shemes, scheme => scheme.Id == "0688d228-2803-44ee-917d-2e544c763797");
-            Assert.Contains(shemes, scheme => scheme.Id == "381b4222-f694-41f0-9685-ff5bb260df2e");
-            Assert.Contains(shemes, scheme => scheme.Id == "49ef8fc0-bb7f-488e-b6a0-f1fc77ec649b");
-            Assert.Contains(shemes, scheme => scheme.Id == "8c5e7fda-e8bf-4a96-9a85-a6e23a8c635c");
-            Assert.Contains(shemes, scheme => scheme.Id == "a1841308-3541-4fab-bc81-f71556f20b4a");
+            Assert.Contains(shemes, scheme => scheme.Id == expectedSchemeId);
         }
 
         [Fact]
         public void GetAllSchemesTest_ValueIsEmty()
         {
-            var inputString = String.Empty;
+            var inputString = string.Empty;
             var shemes = StringUtils.GetAllSchemes(inputString).ToList();
             Assert.NotNull(shemes);
         }
-        
+
         [Fact]
         public void GetAllSchemesTest_ValueIsNull()
         {
