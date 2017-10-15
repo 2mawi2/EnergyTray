@@ -14,7 +14,7 @@ namespace EnergyTray.Worker
     {
         private readonly IPowerProcessor _powerProcessor;
         private readonly IWorkerSettings _workerSettings;
-        private readonly BackgroundWorker _bw = new BackgroundWorker();
+        private IBackgroundWorkerAdapter _bw;
 
         public bool AutoEnabled
         {
@@ -28,10 +28,19 @@ namespace EnergyTray.Worker
 
         public EventHandler OnAutoChanged { get; set; }
 
-        public MonitorCheckWorker(IPowerProcessor powerProcessor, IWorkerSettings workerSettings)
+        public MonitorCheckWorker(
+            IPowerProcessor powerProcessor,
+            IWorkerSettings workerSettings,
+            IBackgroundWorkerAdapter bw)
         {
             _powerProcessor = powerProcessor;
             _workerSettings = workerSettings;
+            SetupBackgroundWorker(bw);
+        }
+
+        private void SetupBackgroundWorker(IBackgroundWorkerAdapter bw)
+        {
+            _bw = bw;
             _bw.WorkerReportsProgress = true;
             _bw.WorkerSupportsCancellation = true;
             _bw.DoWork += Run;

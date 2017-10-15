@@ -110,6 +110,7 @@
     </Compile>
     <Compile Include="Application\Global.cs" />
     <Compile Include="UI\ToolStripItemFactory.cs" />
+    <Compile Include="Worker\IBackgroundWorkerAdapter.cs" />
     <Compile Include="Worker\IMonitorCheckWorker.cs" />
     <Compile Include="Worker\MonitorCheckWorker.cs" />
     <Compile Include="UI\ProcessIcon.cs" />

@@ -90,6 +90,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ContextMenuTests.cs" />
+    <Compile Include="MonitorCheckWorkerTests.cs" />
     <Compile Include="PowerProcessorTests.cs" />
     <Compile Include="ProcessIconTest.cs" />
     <Compile Include="StringUtilsTest.cs" />

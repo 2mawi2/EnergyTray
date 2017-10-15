@@ -2,7 +2,7 @@
 
 namespace EnergyTray.Application.AppSettings
 {
-    public class Worker : IWorkerSettings
+    public class WorkerSettings : IWorkerSettings
     {
         public bool IsAutoChangerEnabled
         {
