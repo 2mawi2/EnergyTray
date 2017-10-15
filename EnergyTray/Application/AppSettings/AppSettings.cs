@@ -7,12 +7,8 @@ namespace EnergyTray.Application.AppSettings
     {
         public void Save(string fileName = Global.DefaultFilename)
         {
-            File.WriteAllText(fileName, JsonConvert.SerializeObject(this));
-        }
-
-        public static void Save(T settings, string fileName = Global.DefaultFilename)
-        {
-            File.WriteAllText(fileName, JsonConvert.SerializeObject(settings));
+            var jset = new JsonSerializerSettings() {TypeNameHandling = TypeNameHandling.All};
+            File.WriteAllText(fileName, JsonConvert.SerializeObject(this, jset));
         }
 
         public static T Load(string fileName = Global.DefaultFilename)

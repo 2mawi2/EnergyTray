@@ -1,12 +1,15 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel;
 using System.Diagnostics;
+using System.Diagnostics.Eventing.Reader;
 using System.Linq;
 using System.Windows.Forms;
 using EnergyTray.Application;
 using EnergyTray.Application.AppSettings;
 using EnergyTray.Application.PowerManagement;
 using EnergyTray.UI;
+using StructureMap.Pipeline;
 
 namespace EnergyTray.Worker
 {
@@ -15,6 +18,10 @@ namespace EnergyTray.Worker
         private readonly IPowerProcessor _powerProcessor;
         private readonly IWorkerSettings _workerSettings;
         private IBackgroundWorkerAdapter _bw;
+
+        public MonitorCheckWorker()
+        {
+        }
 
         public bool AutoEnabled
         {
@@ -40,6 +47,13 @@ namespace EnergyTray.Worker
 
         private void SetupBackgroundWorker(IBackgroundWorkerAdapter bw)
         {
+            _workerSettings.PowerMode = _powerProcessor.GetAllPowerSchemes().Single(i => i.Name.Contains("Power"));
+            _workerSettings.SetConditions(new List<Condition>
+            {
+                new PowerPlugCondition(),
+                new ScreenCondition()
+            });
+
             _bw = bw;
             _bw.WorkerReportsProgress = true;
             _bw.WorkerSupportsCancellation = true;
@@ -59,28 +73,22 @@ namespace EnergyTray.Worker
             {
                 if (AutoEnabled)
                 {
-                    if (IsExternalMonitorSetup() && IsPowerPluggedIn())
+                    var conditions = _workerSettings.GetConditions().ToList();
+
+                    if (conditions.Any())
                     {
-                        _powerProcessor.SwitchScheme(Global.Powermode);
-                    }
-                    else
-                    {
-                        _powerProcessor.SwitchScheme(_powerProcessor.GetActivePowerScheme().Id);
+                        if (conditions.Select(i => i.Validate()).Aggregate((i, j) => i && j))
+                        {
+                            _powerProcessor.SwitchScheme(_workerSettings.PowerMode.Id);
+                        }
+                        else
+                        {
+                            _powerProcessor.SwitchScheme(_powerProcessor.GetActivePowerScheme().Id);
+                        }
                     }
                 }
                 System.Threading.Thread.Sleep(4000);
             }
-        }
-
-        private static bool IsPowerPluggedIn()
-        {
-            return SystemInformation.PowerStatus.PowerLineStatus ==
-                   PowerLineStatus.Online;
-        }
-
-        private static bool IsExternalMonitorSetup()
-        {
-            return Screen.AllScreens.Length > 1;
         }
 
         private void RestartWorkerOnCompleted(object sender, RunWorkerCompletedEventArgs e)
