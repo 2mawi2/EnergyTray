@@ -12,5 +12,9 @@ namespace EnergyTray.Application.Exceptions
         {
           
         }
+
+        public EnergyTrayException(string message, Exception exception) : base(message, exception)
+        {
+        }
     }
 }

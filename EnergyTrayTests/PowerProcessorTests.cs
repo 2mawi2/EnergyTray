@@ -1,13 +1,12 @@
 ﻿using System.Collections.Generic;
 using System.Diagnostics;
 using System.Runtime.CompilerServices;
+using AutoFixture.Xunit2;
 using EnergyTray;
 using EnergyTray.Application.Exceptions;
 using EnergyTray.Application.PowerManagement;
 using EnergyTray.Worker;
 using Moq;
-using Ploeh.AutoFixture.Kernel;
-using Ploeh.AutoFixture.Xunit2;
 using Xunit;
 
 namespace EnergyTrayTests
