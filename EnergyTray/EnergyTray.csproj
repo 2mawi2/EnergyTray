@@ -86,7 +86,6 @@
     <Compile Include="Application\AppSettings\Consumer\IIconSettings.cs" />
     <Compile Include="Application\AppSettings\Consumer\IWorkerSettings.cs" />
     <Compile Include="Application\AppSettings\Consumer\WorkerSettings.cs" />
-    <Compile Include="Application\AppSettings\Provider\AppSettings.cs" />
     <Compile Include="Application\AppSettings\Provider\EnergyTraySettings.cs" />
     <Compile Include="Application\AppSettings\Provider\IAppSettings.cs" />
     <Compile Include="Application\AppSettings\Provider\IEnergyTraySettings.cs" />

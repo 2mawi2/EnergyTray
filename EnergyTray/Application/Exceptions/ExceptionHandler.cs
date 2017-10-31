@@ -22,7 +22,6 @@ namespace EnergyTray.Application.Exceptions
                                $"message: {ex.Message} , " +
                                $"inner exception: {ex.InnerException}";
             
-            
             Debug.WriteLine(errorMessage);
             Trace.WriteLine(errorMessage);
             Console.WriteLine(errorMessage);

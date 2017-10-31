@@ -22,7 +22,7 @@ namespace EnergyTrayTests.UI
         public IContextMenu CreateContextMenu()
         {
             return new ContextMenu(
-                //_monitorCheckWorker.Object, 
+                _monitorCheckWorker.Object, 
                 _powerProcessor.Object,
                 _iconSettings.Object,
                 _workerSettings.Object);

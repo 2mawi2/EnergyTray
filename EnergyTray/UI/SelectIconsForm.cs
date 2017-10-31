@@ -11,6 +11,7 @@ using EnergyTray.Application.AppSettings.Consumer;
 using EnergyTray.Application.Exceptions;
 using EnergyTray.Application.Model;
 using EnergyTray.Application.PowerManagement;
+using EnergyTray.Worker;
 
 namespace EnergyTray.UI
 {
@@ -19,13 +20,18 @@ namespace EnergyTray.UI
         private readonly IPowerProcessor _powerProcessor;
         private readonly IIconSettings _iconSettings;
         private readonly IWorkerSettings _workerSettings;
+        private readonly IMonitorCheckWorker _monitorCheckWorker;
 
-        public SelectIconsForm(IPowerProcessor powerProcessor, IIconSettings iconSettings,
-            IWorkerSettings workerSettings)
+        public SelectIconsForm(
+            IPowerProcessor powerProcessor, 
+            IIconSettings iconSettings,
+            IWorkerSettings workerSettings,
+            IMonitorCheckWorker monitorCheckWorker)
         {
             _powerProcessor = powerProcessor;
             _iconSettings = iconSettings;
             _workerSettings = workerSettings;
+            _monitorCheckWorker = monitorCheckWorker;
             InitializeComponent();
         }
 
@@ -49,7 +55,7 @@ namespace EnergyTray.UI
 
         private void SetupCheckBoxes()
         {
-            checkBox1.Checked = _workerSettings.IsAutoChangerEnabled;
+            checkBox1.Checked = _monitorCheckWorker.AutoEnabled;
             panel1.Enabled = checkBox1.Checked;
             checkBoxMultipleDisplays.Checked = _workerSettings.IsMonitorConditionEnabled;
             checkBoxPluggedIn.Checked = _workerSettings.IsPowerConditionEnabled;
@@ -142,31 +148,19 @@ namespace EnergyTray.UI
 
         private void checkBox1_CheckedChanged(object sender, EventArgs e)
         {
-            checkBox1.Enabled = false;
-            
             var isChecked = checkBox1.Checked;
-            _workerSettings.IsAutoChangerEnabled = isChecked;
+            _monitorCheckWorker.AutoEnabled = isChecked;
             panel1.Enabled = isChecked;
-            
-            checkBox1.Enabled = true;
         }
 
         private void checkBoxMultipleDisplays_CheckedChanged(object sender, EventArgs e)
         {
-            checkBoxMultipleDisplays.Enabled = false;
-            
             _workerSettings.IsMonitorConditionEnabled = checkBoxMultipleDisplays.Checked;
-            
-            checkBoxMultipleDisplays.Enabled = true;
         }
 
         private void checkBoxPluggedIn_CheckedChanged(object sender, EventArgs e)
         {
-            checkBoxPluggedIn.Enabled = false;
-            
             _workerSettings.IsPowerConditionEnabled = checkBoxPluggedIn.Checked;
-            
-            checkBoxPluggedIn.Enabled = true;
         }
 
         private void panel1_Paint(object sender, PaintEventArgs e)

@@ -7,26 +7,12 @@ using Xunit;
 
 namespace EnergyTrayTests.Application.AppSettings.Provider
 {
-    public class WrongFooSettings
-    {
-        public WrongFooSettings(string wrong)
-        {
-        }
-    }
-
-    public class FooSettings : AppSettings<EnergyTraySettings>
-    {
-        public FooSettings(IFileAdapter file) : base(file)
-        {
-        }
-    }
-
     public class AppSettingsTest
     {
         [Theory, AutoMoqData]
         public void TestSave(Mock<IFileAdapter> fileDelegate)
         {
-            var settings = new AppSettings<FooSettings>(fileDelegate.Object);
+            var settings = new EnergyTraySettings();
 
             settings.Save();
 
@@ -40,7 +26,7 @@ namespace EnergyTrayTests.Application.AppSettings.Provider
             fileDelegate.Setup(i => i.Exists(It.IsAny<string>())).Returns(true);
             fileDelegate.Setup(i => i.ReadAllText(It.IsAny<string>())).Returns("");
 
-            var settings = new AppSettings<FooSettings>(fileDelegate.Object);
+            var settings = new EnergyTraySettings();
 
             settings.Load();
 
@@ -54,24 +40,12 @@ namespace EnergyTrayTests.Application.AppSettings.Provider
             var fileDelegate = new Mock<IFileAdapter>();
             fileDelegate.Setup(i => i.Exists(It.IsAny<string>())).Returns(false);
 
-            var settings = new AppSettings<FooSettings>(fileDelegate.Object);
+            var settings = new EnergyTraySettings();
 
             settings.Load();
 
             fileDelegate.Verify(i => i.Exists(It.IsAny<string>()));
             fileDelegate.Verify(i => i.ReadAllText(It.IsAny<string>()), Times.Never);
-        }
-        
-        [Fact]
-        public void LoadSave_HandlesWrongSettings()
-        {
-            var fileDelegate = new Mock<IFileAdapter>();
-            fileDelegate.Setup(i => i.Exists(It.IsAny<string>())).Returns(true);
-            fileDelegate.Setup(i => i.ReadAllText(It.IsAny<string>())).Returns("");
-
-            var settings = new AppSettings<WrongFooSettings>(fileDelegate.Object);
-
-            Assert.Throws<EnergyTrayException>(() => settings.Load());
         }
     }
 }

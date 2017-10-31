@@ -50,9 +50,12 @@ namespace EnergyTray
                 });
 
                 i.ForConcreteType<MonitorCheckWorker>().Configure.Singleton();
+                i.ForConcreteType<EnergyTraySettings>().Configure.Singleton();
                 i.ForConcreteType<ProcessIcon>().Configure.Singleton();
                 i.For<IMonitorCheckWorker>().Use(c => c.GetInstance<MonitorCheckWorker>());
+                i.For<IEnergyTraySettings>().Use(c => c.GetInstance<EnergyTraySettings>());
                 i.For<IProcessIcon>().Use(c => c.GetInstance<ProcessIcon>());
+                i.For<IFileAdapter>().Use(c => c.GetInstance<FileAdapter>());
             });
 
             return container;
