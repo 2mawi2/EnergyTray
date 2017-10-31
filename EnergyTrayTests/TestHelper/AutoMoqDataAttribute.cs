@@ -2,7 +2,7 @@
 using AutoFixture.AutoMoq;
 using AutoFixture.Xunit2;
 
-namespace EnergyTrayTests
+namespace EnergyTrayTests.TestHelper
 {
     public class AutoMoqDataAttribute : AutoDataAttribute
     {

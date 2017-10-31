@@ -1,15 +1,10 @@
-﻿using System.Collections.Generic;
-using System.Diagnostics;
-using System.Runtime.CompilerServices;
-using AutoFixture.Xunit2;
-using EnergyTray;
+﻿using AutoFixture.Xunit2;
 using EnergyTray.Application.Exceptions;
 using EnergyTray.Application.PowerManagement;
-using EnergyTray.Worker;
 using Moq;
 using Xunit;
 
-namespace EnergyTrayTests
+namespace EnergyTrayTests.Application.PowerManager
 {
     public class PowerProcessorTests
     {

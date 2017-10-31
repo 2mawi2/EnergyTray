@@ -1,9 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Dynamic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using System.Windows.Forms;
-using EnergyTray.Application.AppSettings;
 using EnergyTray.Application.AppSettings.Consumer;
 using EnergyTray.Application.Model;
 using EnergyTray.Application.PowerManagement;
@@ -13,7 +10,7 @@ using Moq;
 using Xunit;
 using ContextMenu = EnergyTray.UI.ContextMenu;
 
-namespace EnergyTrayTests
+namespace EnergyTrayTests.UI
 {
     public class ContextMenuTests
     {

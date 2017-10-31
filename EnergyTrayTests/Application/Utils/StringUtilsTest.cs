@@ -1,12 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using EnergyTray;
-using EnergyTray.Application.Model;
+﻿using System.Linq;
 using EnergyTray.Application.Utils;
 using Xunit;
 
-namespace EnergyTrayTests
+namespace EnergyTrayTests.Application.Utils
 {
     public class StringUtilsTest
     {

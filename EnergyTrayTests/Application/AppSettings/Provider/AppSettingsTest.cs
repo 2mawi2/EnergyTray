@@ -1,10 +1,11 @@
 ﻿using EnergyTray.Application.AppSettings.Provider;
 using EnergyTray.Application.Exceptions;
 using EnergyTray.Application.Utils;
+using EnergyTrayTests.TestHelper;
 using Moq;
 using Xunit;
 
-namespace EnergyTrayTests
+namespace EnergyTrayTests.Application.AppSettings.Provider
 {
     public class WrongFooSettings
     {

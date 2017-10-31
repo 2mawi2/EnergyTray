@@ -1,5 +1,4 @@
-﻿using EnergyTray.Application.AppSettings;
-using EnergyTray.Application.AppSettings.Consumer;
+﻿using EnergyTray.Application.AppSettings.Consumer;
 using EnergyTray.Application.Model;
 using EnergyTray.Application.PowerManagement;
 using EnergyTray.UI;
@@ -7,7 +6,7 @@ using EnergyTray.Worker;
 using Moq;
 using Xunit;
 
-namespace EnergyTrayTests
+namespace EnergyTrayTests.UI
 {
     public class ProcessIconTest
     {

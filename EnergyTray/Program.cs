@@ -63,9 +63,9 @@ namespace EnergyTray
                     _.WithDefaultConventions();
                 });
 
-                //i.ForConcreteType<MonitorCheckWorker>().Configure.Singleton();
+                i.ForConcreteType<MonitorCheckWorker>().Configure.Singleton();
                 i.ForConcreteType<ProcessIcon>().Configure.Singleton();
-                //i.For<IMonitorCheckWorker>().Use(c => c.GetInstance<MonitorCheckWorker>());
+                i.For<IMonitorCheckWorker>().Use(c => c.GetInstance<MonitorCheckWorker>());
                 i.For<IProcessIcon>().Use(c => c.GetInstance<ProcessIcon>());
             });
 

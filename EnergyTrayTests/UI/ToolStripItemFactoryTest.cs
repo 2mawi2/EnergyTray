@@ -1,8 +1,7 @@
-﻿using EnergyTray.Application.Utils;
-using EnergyTray.UI;
+﻿using EnergyTray.UI;
 using Xunit;
 
-namespace EnergyTrayTests
+namespace EnergyTrayTests.UI
 {
     public class ToolStripItemFactoryTest
     {
