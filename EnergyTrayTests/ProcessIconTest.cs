@@ -1,4 +1,5 @@
 ﻿using EnergyTray.Application.AppSettings;
+using EnergyTray.Application.AppSettings.Consumer;
 using EnergyTray.Application.Model;
 using EnergyTray.Application.PowerManagement;
 using EnergyTray.UI;

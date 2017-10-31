@@ -1,4 +1,4 @@
-﻿namespace EnergyTray.Application.AppSettings
+﻿namespace EnergyTray.Application.AppSettings.Consumer
 {
     public interface IIconSettings
     {

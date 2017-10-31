@@ -4,6 +4,7 @@ using System.Dynamic;
 using System.Linq;
 using System.Windows.Forms;
 using EnergyTray.Application.AppSettings;
+using EnergyTray.Application.AppSettings.Consumer;
 using EnergyTray.Application.Model;
 using EnergyTray.Application.PowerManagement;
 using EnergyTray.UI;
@@ -22,7 +23,10 @@ namespace EnergyTrayTests
 
         public IContextMenu CreateContextMenu()
         {
-            return new ContextMenu(_monitorCheckWorker.Object, _powerProcessor.Object, _iconSettings.Object);
+            return new ContextMenu(
+                //_monitorCheckWorker.Object, 
+                _powerProcessor.Object, 
+                _iconSettings.Object);
         }
 
         private static IEnumerable<PowerScheme> CreateTestSchemes()

@@ -8,6 +8,7 @@ using System.Reflection;
 using System.Windows.Forms;
 using EnergyTray.Application;
 using EnergyTray.Application.AppSettings;
+using EnergyTray.Application.AppSettings.Consumer;
 using EnergyTray.Application.Model;
 using EnergyTray.Application.PowerManagement;
 using EnergyTray.Application.Utils;

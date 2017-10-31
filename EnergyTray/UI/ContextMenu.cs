@@ -4,6 +4,7 @@ using System.Windows.Forms;
 using System.Windows.Forms.VisualStyles;
 using EnergyTray.Application;
 using EnergyTray.Application.AppSettings;
+using EnergyTray.Application.AppSettings.Consumer;
 using EnergyTray.Application.Extensions;
 using EnergyTray.Application.Model;
 using EnergyTray.Application.PowerManagement;
@@ -18,11 +19,11 @@ namespace EnergyTray.UI
         private readonly IIconSettings _iconSettings;
 
         public ContextMenu(
-            IMonitorCheckWorker monitorCheckWorker,
+            //IMonitorCheckWorker monitorCheckWorker,
             IPowerProcessor powerProcessor,
             IIconSettings iconSettings)
         {
-            _monitorCheckWorker = monitorCheckWorker;
+            //_monitorCheckWorker = monitorCheckWorker;
             _powerProcessor = powerProcessor;
             _iconSettings = iconSettings;
         }

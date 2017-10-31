@@ -82,12 +82,14 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Application\App.cs" />
-    <Compile Include="Application\AppSettings\AppSettings.cs" />
-    <Compile Include="Application\AppSettings\EnergyTraySetttings.cs" />
-    <Compile Include="Application\AppSettings\IconSettings.cs" />
-    <Compile Include="Application\AppSettings\IIconSettings.cs" />
-    <Compile Include="Application\AppSettings\IWorkerSettings.cs" />
-    <Compile Include="Application\AppSettings\WorkerSettings.cs" />
+    <Compile Include="Application\AppSettings\Consumer\IconSettings.cs" />
+    <Compile Include="Application\AppSettings\Consumer\IIconSettings.cs" />
+    <Compile Include="Application\AppSettings\Consumer\IWorkerSettings.cs" />
+    <Compile Include="Application\AppSettings\Consumer\WorkerSettings.cs" />
+    <Compile Include="Application\AppSettings\Provider\AppSettings.cs" />
+    <Compile Include="Application\AppSettings\Provider\EnergyTraySettings.cs" />
+    <Compile Include="Application\AppSettings\Provider\IAppSettings.cs" />
+    <Compile Include="Application\AppSettings\Provider\IEnergyTraySettings.cs" />
     <Compile Include="Application\Exceptions\EnergyTrayException.cs" />
     <Compile Include="Application\Exceptions\ExceptionHandler.cs" />
     <Compile Include="Application\Extensions\EnumerableExtensions.cs" />
@@ -97,6 +99,8 @@
     <Compile Include="Application\PowerManagement\ICmd.cs" />
     <Compile Include="Application\PowerManagement\IPowerProcessor.cs" />
     <Compile Include="Application\PowerManagement\PowerProcessor.cs" />
+    <Compile Include="Application\Utils\FileDelegate.cs" />
+    <Compile Include="Application\Utils\IFileDelegate.cs" />
     <Compile Include="Application\Utils\StringUtils.cs" />
     <Compile Include="UI\ComboboxItem.cs" />
     <Compile Include="UI\IContextMenu.cs" />

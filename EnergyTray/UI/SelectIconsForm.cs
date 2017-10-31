@@ -6,6 +6,7 @@ using System.Runtime.CompilerServices;
 using System.Windows.Forms;
 using System.Windows.Forms.VisualStyles;
 using EnergyTray.Application.AppSettings;
+using EnergyTray.Application.AppSettings.Consumer;
 using EnergyTray.Application.Exceptions;
 using EnergyTray.Application.Model;
 using EnergyTray.Application.PowerManagement;

@@ -1,4 +1,7 @@
-﻿using EnergyTray.Application.AppSettings;
+﻿using System.Collections.Generic;
+using EnergyTray.Application.AppSettings;
+using EnergyTray.Application.AppSettings.Consumer;
+using EnergyTray.Application.Model;
 using EnergyTray.Application.PowerManagement;
 using EnergyTray.Worker;
 using Moq;
@@ -26,10 +29,29 @@ namespace EnergyTrayTests
         [Fact]
         public void MonitorCheckWorkerTest_SetupBackgroundWorker()
         {
+            _powerProcessor.Setup(i => i.GetAllPowerSchemes()).Returns(new List<PowerScheme>
+            {
+                new PowerScheme {Name = "Power"}
+            });
+
             CreateMonitorCheckWorker();
+
             _backgroundWorker.Verify(i => i.RunWorkerAsync());
             _backgroundWorker.VerifySet(i => i.WorkerReportsProgress = true);
             _backgroundWorker.VerifySet(i => i.WorkerSupportsCancellation = true);
+        }
+
+        [Fact]
+        public void MonitorCheckWorkerTest_GetPowerSchemes()
+        {
+            _powerProcessor.Setup(i => i.GetAllPowerSchemes()).Returns(new List<PowerScheme>
+            {
+                new PowerScheme {Name = "Power"}
+            });
+
+            CreateMonitorCheckWorker();
+
+            _powerProcessor.Verify(i => i.GetAllPowerSchemes());
         }
 
         [Fact]

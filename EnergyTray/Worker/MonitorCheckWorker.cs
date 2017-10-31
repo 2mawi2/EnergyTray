@@ -7,6 +7,8 @@ using System.Linq;
 using System.Windows.Forms;
 using EnergyTray.Application;
 using EnergyTray.Application.AppSettings;
+using EnergyTray.Application.AppSettings.Consumer;
+using EnergyTray.Application.Model;
 using EnergyTray.Application.PowerManagement;
 using EnergyTray.UI;
 using StructureMap.Pipeline;
@@ -47,12 +49,14 @@ namespace EnergyTray.Worker
 
         private void SetupBackgroundWorker(IBackgroundWorkerAdapter bw)
         {
-            _workerSettings.PowerMode = _powerProcessor.GetAllPowerSchemes().Single(i => i.Name.Contains("Power"));
-            _workerSettings.SetConditions(new List<Condition>
+            var powerMode = _powerProcessor.GetAllPowerSchemes()
+                                           .SingleOrDefault(i => i.Name.Contains("Power"));
+
+            if (powerMode == default(PowerScheme))
             {
-                new PowerPlugCondition(),
-                new ScreenCondition()
-            });
+                _workerSettings.IsAutoChangerEnabled = false;
+                return;
+            }
 
             _bw = bw;
             _bw.WorkerReportsProgress = true;
@@ -73,19 +77,11 @@ namespace EnergyTray.Worker
             {
                 if (AutoEnabled)
                 {
-                    var conditions = _workerSettings.GetConditions().ToList();
+                    var allConditionsTrue = true; // TODO get conditions from config and check
 
-                    if (conditions.Any())
-                    {
-                        if (conditions.Select(i => i.Validate()).Aggregate((i, j) => i && j))
-                        {
-                            _powerProcessor.SwitchScheme(_workerSettings.PowerMode.Id);
-                        }
-                        else
-                        {
-                            _powerProcessor.SwitchScheme(_powerProcessor.GetActivePowerScheme().Id);
-                        }
-                    }
+                    _powerProcessor.SwitchScheme(allConditionsTrue
+                        ? _workerSettings.PowerMode.Id
+                        : _powerProcessor.GetActivePowerScheme().Id);
                 }
                 System.Threading.Thread.Sleep(4000);
             }
