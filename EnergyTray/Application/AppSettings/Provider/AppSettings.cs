@@ -7,9 +7,9 @@ namespace EnergyTray.Application.AppSettings.Provider
 {
     public class AppSettings<T> : IAppSettings<T>
     {
-        private readonly IFileDelegate _file;
+        private readonly IFileAdapter _file;
 
-        public AppSettings(IFileDelegate file)
+        public AppSettings(IFileAdapter file)
         {
             _file = file;
         }

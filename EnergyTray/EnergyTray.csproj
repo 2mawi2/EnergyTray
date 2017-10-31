@@ -99,8 +99,8 @@
     <Compile Include="Application\PowerManagement\ICmd.cs" />
     <Compile Include="Application\PowerManagement\IPowerProcessor.cs" />
     <Compile Include="Application\PowerManagement\PowerProcessor.cs" />
-    <Compile Include="Application\Utils\FileDelegate.cs" />
-    <Compile Include="Application\Utils\IFileDelegate.cs" />
+    <Compile Include="Application\Utils\FileAdapter.cs" />
+    <Compile Include="Application\Utils\IFileAdapter.cs" />
     <Compile Include="Application\Utils\StringUtils.cs" />
     <Compile Include="UI\ComboboxItem.cs" />
     <Compile Include="UI\IContextMenu.cs" />

@@ -21,10 +21,6 @@ namespace EnergyTray.Worker
         private readonly IWorkerSettings _workerSettings;
         private IBackgroundWorkerAdapter _bw;
 
-        public MonitorCheckWorker()
-        {
-        }
-
         public bool AutoEnabled
         {
             get => _workerSettings.IsAutoChangerEnabled;
@@ -77,14 +73,30 @@ namespace EnergyTray.Worker
             {
                 if (AutoEnabled)
                 {
-                    var allConditionsTrue = true; // TODO get conditions from config and check
-
-                    _powerProcessor.SwitchScheme(allConditionsTrue
-                        ? _workerSettings.PowerMode.Id
-                        : _powerProcessor.GetActivePowerScheme().Id);
+                    _powerProcessor.SwitchScheme(DecideAndGetPowerSchemeId());
                 }
                 System.Threading.Thread.Sleep(4000);
             }
+        }
+
+        private string DecideAndGetPowerSchemeId()
+        {
+            return IsMultiMonitorOrDisabled() && IsPluggedInOrDisabled()
+                ? _workerSettings.PowerMode.Id
+                : _powerProcessor.GetActivePowerScheme().Id;
+        }
+
+        private bool IsMultiMonitorOrDisabled() => !_workerSettings.IsMonitorConditionEnabled
+                                                   || IsMultiMonitorSetup();
+
+        private bool IsPluggedInOrDisabled() => !_workerSettings.IsPowerConditionEnabled
+                                                || IsComputerPluggedIn();
+
+        private static bool IsMultiMonitorSetup() => Screen.AllScreens.Length > 1;
+
+        private static bool IsComputerPluggedIn()
+        {
+            return SystemInformation.PowerStatus.PowerLineStatus == PowerLineStatus.Online;
         }
 
         private void RestartWorkerOnCompleted(object sender, RunWorkerCompletedEventArgs e)

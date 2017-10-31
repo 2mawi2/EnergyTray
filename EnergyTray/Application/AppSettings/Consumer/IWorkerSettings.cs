@@ -8,5 +8,7 @@ namespace EnergyTray.Application.AppSettings.Consumer
     {
         bool IsAutoChangerEnabled { get; set; }
         PowerScheme PowerMode { get; set; }
+        bool IsMonitorConditionEnabled { get; set; }
+        bool IsPowerConditionEnabled { get; set; }
     }
 }

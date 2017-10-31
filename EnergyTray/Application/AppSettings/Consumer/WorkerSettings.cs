@@ -35,5 +35,27 @@ namespace EnergyTray.Application.AppSettings.Consumer
                 settings.Save();
             }
         }
+        
+        public bool IsMonitorConditionEnabled
+        {
+            get => _settings.Load().IsMonitorConditionEnabled;
+            set
+            {
+                var settings = _settings.Load();
+                settings.IsMonitorConditionEnabled = value;
+                settings.Save();
+            }
+        }
+        
+        public bool IsPowerConditionEnabled
+        {
+            get => _settings.Load().IsPowerConditionEnabled;
+            set
+            {
+                var settings = _settings.Load();
+                settings.IsPowerConditionEnabled = value;
+                settings.Save();
+            }
+        }
     }
 }

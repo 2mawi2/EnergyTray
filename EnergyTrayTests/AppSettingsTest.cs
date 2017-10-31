@@ -15,7 +15,7 @@ namespace EnergyTrayTests
 
     public class FooSettings : AppSettings<EnergyTraySettings>
     {
-        public FooSettings(IFileDelegate file) : base(file)
+        public FooSettings(IFileAdapter file) : base(file)
         {
         }
     }
@@ -23,7 +23,7 @@ namespace EnergyTrayTests
     public class AppSettingsTest
     {
         [Theory, AutoMoqData]
-        public void TestSave(Mock<IFileDelegate> fileDelegate)
+        public void TestSave(Mock<IFileAdapter> fileDelegate)
         {
             var settings = new AppSettings<FooSettings>(fileDelegate.Object);
 
@@ -35,7 +35,7 @@ namespace EnergyTrayTests
         [Fact]
         public void LoadSave()
         {
-            var fileDelegate = new Mock<IFileDelegate>();
+            var fileDelegate = new Mock<IFileAdapter>();
             fileDelegate.Setup(i => i.Exists(It.IsAny<string>())).Returns(true);
             fileDelegate.Setup(i => i.ReadAllText(It.IsAny<string>())).Returns("");
 
@@ -50,7 +50,7 @@ namespace EnergyTrayTests
         [Fact]
         public void LoadSave_DoesNotReadIfNotExists()
         {
-            var fileDelegate = new Mock<IFileDelegate>();
+            var fileDelegate = new Mock<IFileAdapter>();
             fileDelegate.Setup(i => i.Exists(It.IsAny<string>())).Returns(false);
 
             var settings = new AppSettings<FooSettings>(fileDelegate.Object);
@@ -64,7 +64,7 @@ namespace EnergyTrayTests
         [Fact]
         public void LoadSave_HandlesWrongSettings()
         {
-            var fileDelegate = new Mock<IFileDelegate>();
+            var fileDelegate = new Mock<IFileAdapter>();
             fileDelegate.Setup(i => i.Exists(It.IsAny<string>())).Returns(true);
             fileDelegate.Setup(i => i.ReadAllText(It.IsAny<string>())).Returns("");
 

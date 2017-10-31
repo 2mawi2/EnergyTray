@@ -1,6 +1,6 @@
 ﻿namespace EnergyTray.Application.Utils
 {
-    public interface IFileDelegate
+    public interface IFileAdapter
     {
         void WriteAllText(string fileName, string contents);
         bool Exists(string fileName);
