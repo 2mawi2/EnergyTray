@@ -17,15 +17,18 @@ namespace EnergyTray.UI
         private readonly IMonitorCheckWorker _monitorCheckWorker;
         private readonly IPowerProcessor _powerProcessor;
         private readonly IIconSettings _iconSettings;
+        private IWorkerSettings _workerSettings;
 
         public ContextMenu(
             //IMonitorCheckWorker monitorCheckWorker,
             IPowerProcessor powerProcessor,
-            IIconSettings iconSettings)
+            IIconSettings iconSettings, 
+            IWorkerSettings workerSettings)
         {
             //_monitorCheckWorker = monitorCheckWorker;
             _powerProcessor = powerProcessor;
             _iconSettings = iconSettings;
+            _workerSettings = workerSettings;
         }
 
         public ContextMenuStrip Create()
@@ -76,7 +79,7 @@ namespace EnergyTray.UI
         {
             return ToolStripItemFactory.Create("Select Icons", (sender, e) =>
             {
-                var form = new SelectIconsForm(_powerProcessor, _iconSettings);
+                var form = new SelectIconsForm(_powerProcessor, _iconSettings, _workerSettings);
                 form.Show();
             });
         }

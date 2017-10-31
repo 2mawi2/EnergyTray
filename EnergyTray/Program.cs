@@ -28,22 +28,8 @@ namespace EnergyTray
             EnableVisualStyles();
             SetCompatibleTextRenderingDefault(false);
             ConfigureErrorHandling();
-            Debug.WriteLine("Application startet");
-            TryCreateContainer();
+            CreateContainer().GetInstance<IApp>();
             Run();
-        }
-
-        private static void TryCreateContainer()
-        {
-            try
-            {
-                CreateContainer().GetInstance<IApp>();
-            }
-            catch (Exception e)
-            {
-                Console.WriteLine(e);
-                throw;
-            }
         }
 
         private static void ConfigureErrorHandling()

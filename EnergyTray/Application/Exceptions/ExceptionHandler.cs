@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics;
 using System.Threading;
 
 namespace EnergyTray.Application.Exceptions
@@ -17,9 +18,14 @@ namespace EnergyTray.Application.Exceptions
 
         private static void HandleException(Exception ex)
         {
-            Console.WriteLine($"Exception: {ex}, " +
-                              $"message: {ex.Message} , " +
-                              $"inner exception: {ex.InnerException}");
+            var errorMessage = $"Exception: {ex}, " +
+                               $"message: {ex.Message} , " +
+                               $"inner exception: {ex.InnerException}";
+            
+            
+            Debug.WriteLine(errorMessage);
+            Trace.WriteLine(errorMessage);
+            Console.WriteLine(errorMessage);
         }
     }
 }

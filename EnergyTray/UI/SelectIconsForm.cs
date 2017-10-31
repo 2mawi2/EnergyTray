@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Drawing;
 using System.IO;
 using System.Linq;
@@ -17,26 +18,41 @@ namespace EnergyTray.UI
     {
         private readonly IPowerProcessor _powerProcessor;
         private readonly IIconSettings _iconSettings;
+        private readonly IWorkerSettings _workerSettings;
 
-        public SelectIconsForm(IPowerProcessor powerProcessor, IIconSettings iconSettings)
+        public SelectIconsForm(IPowerProcessor powerProcessor, IIconSettings iconSettings,
+            IWorkerSettings workerSettings)
         {
             _powerProcessor = powerProcessor;
             _iconSettings = iconSettings;
+            _workerSettings = workerSettings;
             InitializeComponent();
         }
 
         private void SelectIconsForm_Load(object sender, EventArgs e)
         {
+            SetupComboBoxes();
+            SetupCheckBoxes();
+        }
+
+        private void SetupComboBoxes()
+        {
             var powerschemes = _powerProcessor.GetAllPowerSchemes().ToList();
             var activeScheme = powerschemes.Single(j => j.IsActive);
-
             comboBox1.Items.AddRange(powerschemes.Select(i => (object) new ComboboxItem
             {
                 Text = i.Name,
                 Value = i.Name
             }).ToArray());
-
             comboBox1.SelectedIndex = comboBox1.FindStringExact(activeScheme.Name);
+        }
+
+        private void SetupCheckBoxes()
+        {
+            checkBox1.Checked = _workerSettings.IsAutoChangerEnabled;
+            panel1.Enabled = checkBox1.Checked;
+            checkBoxMultipleDisplays.Checked = _workerSettings.IsMonitorConditionEnabled;
+            checkBoxPluggedIn.Checked = _workerSettings.IsPowerConditionEnabled;
         }
 
         private PowerScheme GetSelectedPowerScheme()
@@ -121,6 +137,39 @@ namespace EnergyTray.UI
         }
 
         private void pictureBox1_Click(object sender, System.EventArgs e)
+        {
+        }
+
+        private void checkBox1_CheckedChanged(object sender, EventArgs e)
+        {
+            checkBox1.Enabled = false;
+            
+            var isChecked = checkBox1.Checked;
+            _workerSettings.IsAutoChangerEnabled = isChecked;
+            panel1.Enabled = isChecked;
+            
+            checkBox1.Enabled = true;
+        }
+
+        private void checkBoxMultipleDisplays_CheckedChanged(object sender, EventArgs e)
+        {
+            checkBoxMultipleDisplays.Enabled = false;
+            
+            _workerSettings.IsMonitorConditionEnabled = checkBoxMultipleDisplays.Checked;
+            
+            checkBoxMultipleDisplays.Enabled = true;
+        }
+
+        private void checkBoxPluggedIn_CheckedChanged(object sender, EventArgs e)
+        {
+            checkBoxPluggedIn.Enabled = false;
+            
+            _workerSettings.IsPowerConditionEnabled = checkBoxPluggedIn.Checked;
+            
+            checkBoxPluggedIn.Enabled = true;
+        }
+
+        private void panel1_Paint(object sender, PaintEventArgs e)
         {
         }
     }

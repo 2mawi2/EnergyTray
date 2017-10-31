@@ -17,13 +17,15 @@ namespace EnergyTrayTests.UI
         private Mock<IMonitorCheckWorker> _monitorCheckWorker = new Mock<IMonitorCheckWorker>();
         private Mock<IPowerProcessor> _powerProcessor = new Mock<IPowerProcessor>();
         private Mock<IIconSettings> _iconSettings = new Mock<IIconSettings>();
+        private Mock<IWorkerSettings> _workerSettings = new Mock<IWorkerSettings>();
 
         public IContextMenu CreateContextMenu()
         {
             return new ContextMenu(
                 //_monitorCheckWorker.Object, 
-                _powerProcessor.Object, 
-                _iconSettings.Object);
+                _powerProcessor.Object,
+                _iconSettings.Object,
+                _workerSettings.Object);
         }
 
         private static IEnumerable<PowerScheme> CreateTestSchemes()
